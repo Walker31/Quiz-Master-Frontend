@@ -1,14 +1,16 @@
 import { useState } from "react";
 import { NavLink, Outlet } from "react-router-dom";
 import { useTheme } from "@/context/ThemeContext";
-import DashboardIcon from '@mui/icons-material/Dashboard';
-import MenuBookIcon from '@mui/icons-material/MenuBook';
-import QuizIcon from '@mui/icons-material/Quiz';
-import BarChartIcon from '@mui/icons-material/BarChart';
-import PrintIcon from '@mui/icons-material/Print';
-import LogoutIcon from '@mui/icons-material/Logout';
-import MenuIcon from '@mui/icons-material/Menu';
-import CloseIcon from '@mui/icons-material/Close';
+import {
+  Dashboard as DashboardIcon,
+  MenuBook as MenuBookIcon,
+  Quiz as QuizIcon,
+  BarChart as BarChartIcon,
+  Print as PrintIcon,
+  Logout as LogoutIcon,
+  Menu as MenuIcon,
+  Close as CloseIcon
+} from "@mui/icons-material";
 
 const sidebarLinks = [
   { to: "/admin", label: "Overview", icon: <DashboardIcon fontSize="small" />, end: true },

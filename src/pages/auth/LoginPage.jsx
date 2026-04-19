@@ -2,6 +2,7 @@ import { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useAuth } from "@/context/AuthContext";
 import authService from "@/services/authService";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 
 function LoginPage() {
   const navigate = useNavigate();
@@ -10,6 +11,7 @@ function LoginPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleChange = (e) => {
     const { id, value } = e.target;
@@ -111,15 +113,24 @@ function LoginPage() {
             <label className="theme-text-secondary mb-2 block text-sm font-medium" htmlFor="password">
               Password
             </label>
-            <input
-              id="password"
-              type="password"
-              placeholder="Enter your password"
-              value={formData.password}
-              onChange={handleChange}
-              disabled={loading}
-              className="theme-input w-full rounded-2xl px-4 py-3 disabled:opacity-50"
-            />
+            <div className="relative">
+              <input
+                id="password"
+                type={showPassword ? "text" : "password"}
+                placeholder="Enter your password"
+                value={formData.password}
+                onChange={handleChange}
+                disabled={loading}
+                className="theme-input w-full rounded-2xl px-4 py-3 pr-12 disabled:opacity-50"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="theme-text-muted absolute right-4 top-1/2 -translate-y-1/2 transition-colors hover:text-blue-500"
+              >
+                {showPassword ? <VisibilityOff fontSize="small" /> : <Visibility fontSize="small" />}
+              </button>
+            </div>
           </div>
 
           <div className="theme-text-muted flex items-center justify-between text-sm">

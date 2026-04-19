@@ -1,10 +1,12 @@
 import { useState, useEffect } from "react";
-import { contentService } from "@/services/quizService";
+import { contentService } from "@/services/contentService";
 import Modal from "@/components/Modal";
-import BookmarkIcon from "@mui/icons-material/Bookmark";
-import DescriptionIcon from "@mui/icons-material/Description";
-import SchoolIcon from "@mui/icons-material/School";
-import AddIcon from "@mui/icons-material/Add";
+import {
+  Bookmark as BookmarkIcon,
+  Description as DescriptionIcon,
+  School as SchoolIcon,
+  Add as AddIcon
+} from "@mui/icons-material";
 
 export function AddSubjectModal({ open, onClose, onSubmit }) {
   const [examTypes, setExamTypes] = useState([]);

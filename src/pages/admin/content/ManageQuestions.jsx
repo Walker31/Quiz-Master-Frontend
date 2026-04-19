@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { quizService } from "@/services/quizService";
+import { contentService } from "@/services/contentService";
 import AddQuestionModal from "@/components/AddQuestionModal";
 import EmptyState from "@/components/EmptyState";
 import StatCard from "@/components/StatCard";
@@ -58,16 +59,13 @@ function ManageQuestions() {
     try {
       setLoading(true);
       // Fetch chapter data
-      const chaptersRes = await quizService.getChapters();
+      const chaptersRes = await contentService.getChapters();
       const chap = chaptersRes.data.find((c) => c.id === parseInt(chapterId));
       setChapter(chap);
 
       // Fetch questions for this chapter
-      const questionsRes = await quizService.getQuestions?.();
-      if (questionsRes) {
-        const chapterQuestions = questionsRes.data.filter((q) => q.chapter === parseInt(chapterId));
-        setQuestions(chapterQuestions);
-      }
+      const questionsRes = await contentService.getQuestions({ chapter: chapterId });
+      setQuestions(questionsRes.data);
     } catch (e) {
       console.error(e);
     } finally {
@@ -76,14 +74,12 @@ function ManageQuestions() {
   };
 
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [chapterId]);
 
   const handleAddQuestion = async (formData) => {
     try {
-      await quizService.createQuestion?.({ ...formData, chapter: parseInt(chapterId) });
+      await contentService.createQuestion({ ...formData, chapter: parseInt(chapterId) });
       setShowAddModal(false);
       fetchData();
     } catch (e) {
@@ -95,7 +91,7 @@ function ManageQuestions() {
   const handleDeleteQuestion = async (id) => {
     if (!confirm("Delete this question?")) return;
     try {
-      await quizService.deleteQuestion?.(id);
+      await contentService.deleteQuestion(id);
       fetchData();
     } catch (e) {
       console.error(e);

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { quizService } from "@/services/quizService";
+import { analyticsService } from "@/services/analyticsService";
 import { useTheme } from "@/context/ThemeContext";
 
 function AdminSummary() {
@@ -9,13 +9,13 @@ function AdminSummary() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetch = async () => {
+    const fetchStats = async () => {
       try {
-        const res = await quizService.getScores();
+        const res = await analyticsService.getPerformance();
         setScores(res.data);
       } catch (e) { console.error(e); } finally { setLoading(false); }
     };
-    fetch();
+    fetchStats();
   }, []);
 
   if (loading) return <p className="theme-text-muted">Loading...</p>;

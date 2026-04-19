@@ -1,10 +1,12 @@
 import { useState } from "react";
-import FolderOpenIcon from "@mui/icons-material/FolderOpen";
-import QuizIcon from "@mui/icons-material/Quiz";
-import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
-import AddIcon from "@mui/icons-material/Add";
-import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
+import {
+  FolderOpen as FolderOpenIcon,
+  Quiz as QuizIcon,
+  DeleteOutlined as DeleteOutlinedIcon,
+  Add as AddIcon,
+  KeyboardArrowDown as KeyboardArrowDownIcon,
+  KeyboardArrowUp as KeyboardArrowUpIcon
+} from "@mui/icons-material";
 import { ChapterItem } from "./ChapterItem";
 
 export function SubjectCard({ 

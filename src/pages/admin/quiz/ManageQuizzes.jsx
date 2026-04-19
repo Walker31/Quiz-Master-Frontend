@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { quizService } from "@/services/quizService";
+import { contentService } from "@/services/contentService";
 import { useTheme } from "@/context/ThemeContext";
 import AddIcon from '@mui/icons-material/Add';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutlined';
@@ -26,7 +27,9 @@ function ManageQuizzes() {
   const fetchData = async () => {
     try {
       const [qzRes, sRes, cRes] = await Promise.all([
-        quizService.getQuizzes(), quizService.getSubjects(), quizService.getChapters(),
+        quizService.getQuizzes(), 
+        contentService.getSubjects(), 
+        contentService.getChapters(),
       ]);
       setQuizzes(qzRes.data); setSubjects(sRes.data); setChapters(cRes.data);
     } catch (e) { console.error(e); } finally { setLoading(false); }
@@ -36,8 +39,10 @@ function ManageQuizzes() {
 
   const fetchQuestions = async (quizId) => {
     try {
-      const res = await quizService.getQuestions(quizId);
-      setQuestions((prev) => ({ ...prev, [quizId]: res.data }));
+      const res = await quizService.getQuizDetails(quizId);
+      const sections = res.data.sections || [];
+      const allQs = sections.flatMap(s => s.quiz_questions);
+      setQuestions((prev) => ({ ...prev, [quizId]: allQs }));
     } catch (e) { console.error(e); }
   };
 

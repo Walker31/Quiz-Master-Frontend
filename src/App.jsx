@@ -135,9 +135,9 @@ function App() {
         <Route path="/student/all-quizzes" element={<ProtectedRoute><AllQuizzesPage /></ProtectedRoute>} />
         <Route path="/student/my-assignments" element={<ProtectedRoute><MyAssignmentsPage /></ProtectedRoute>} />
         <Route path="/student/quiz/:id" element={<ProtectedRoute><QuizDetailPage /></ProtectedRoute>} />
-        <Route path="/student/attempt/:id" element={<ProtectedRoute><QuizAttemptWindow /></ProtectedRoute>} />
-        <Route path="/student/result/:id" element={<ProtectedRoute><QuizResultPage /></ProtectedRoute>} />
-        <Route path="/student/review/:id" element={<ProtectedRoute><SolutionReviewPage /></ProtectedRoute>} />
+        <Route path="/student/attempt/:attemptId" element={<ProtectedRoute><QuizAttemptWindow /></ProtectedRoute>} />
+        <Route path="/student/result/:attemptId" element={<ProtectedRoute><QuizResultPage /></ProtectedRoute>} />
+        <Route path="/student/review/:attemptId" element={<ProtectedRoute><SolutionReviewPage /></ProtectedRoute>} />
         <Route path="/student/attempts" element={<ProtectedRoute><AttemptHistoryPage /></ProtectedRoute>} />
         <Route path="/student/analytics" element={<ProtectedRoute><UserAnalyticsPage /></ProtectedRoute>} />
         <Route path="/student/leaderboard" element={<ProtectedRoute><StudentLeaderboardPage /></ProtectedRoute>} />

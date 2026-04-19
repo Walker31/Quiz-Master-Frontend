@@ -1,14 +1,17 @@
 import { useState, useEffect } from "react";
 import { quizService } from "@/services/quizService";
+import { contentService } from "@/services/contentService";
 import QuestionPaperPreview from "@/components/QuestionPaperPreview";
 
-import AddIcon from "@mui/icons-material/Add";
-import DeleteIcon from "@mui/icons-material/Delete";
-import PrintIcon from "@mui/icons-material/Print";
-import DownloadIcon from "@mui/icons-material/Download";
-import PreviewIcon from "@mui/icons-material/Preview";
-import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-import ClearIcon from "@mui/icons-material/Clear";
+import {
+  Add as AddIcon,
+  Delete as DeleteIcon,
+  Print as PrintIcon,
+  Download as DownloadIcon,
+  Preview as PreviewIcon,
+  CheckCircle as CheckCircleIcon,
+  Clear as ClearIcon
+} from "@mui/icons-material";
 
 function GenerateQuestionPaper() {
   const [subjects, setSubjects] = useState([]);
@@ -35,9 +38,9 @@ function GenerateQuestionPaper() {
     try {
       setLoading(true);
       const [sRes, cRes, qRes, quizRes] = await Promise.all([
-        quizService.getSubjects(),
-        quizService.getChapters(),
-        quizService.getAllQuestions(),  // Get all questions
+        contentService.getSubjects(),
+        contentService.getChapters(),
+        contentService.getQuestions(),
         quizService.getQuizzes(),
       ]);
       setSubjects(sRes.data);

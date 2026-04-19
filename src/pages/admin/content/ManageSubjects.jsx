@@ -1,13 +1,14 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { quizService, contentService } from "@/services/quizService";
+import { quizService } from "@/services/quizService";
+import { contentService } from "@/services/contentService";
 
 // UI Components
 import Modal from "@/components/Modal";
 import EmptyState from "@/components/EmptyState";
 import StatCard from "@/components/StatCard";
-import { SubjectCard } from "./components/SubjectCard";
-import { AddSubjectModal } from "./components/AddSubjectModal";
+import { SubjectCard } from "../components/SubjectCard";
+import { AddSubjectModal } from "../components/AddSubjectModal";
 
 // Icons
 import AddIcon from "@mui/icons-material/Add";
@@ -52,9 +53,9 @@ function ManageSubjects() {
     try {
       const [etRes, sRes, cRes, qRes] = await Promise.all([
         contentService.getExamTypes(),
-        quizService.getSubjects(),
-        quizService.getChapters(),
-        quizService.getQuizzes(), // Legacy
+        contentService.getSubjects(),
+        contentService.getChapters(),
+        quizService.getQuizzes(), // Quizzes stay in quizService
       ]);
       setExamTypes(etRes.data);
       setSubjects(sRes.data);
@@ -74,7 +75,7 @@ function ManageSubjects() {
   // Handlers
   const handleAddSubject = async (formData) => {
     try {
-      await quizService.createSubject(formData);
+      await contentService.createSubject(formData);
       setShowSubjectModal(false);
       fetchData();
     } catch (e) { console.error(e); }
@@ -83,7 +84,7 @@ function ManageSubjects() {
   const handleAddChapter = async (e) => {
     e.preventDefault();
     try {
-      await quizService.createChapter({ ...chapterForm, subject: activeSubjectId });
+      await contentService.createChapter({ ...chapterForm, subject: activeSubjectId });
       setChapterForm({ name: "", description: "" });
       setShowChapterModal(false);
       fetchData();
@@ -93,7 +94,7 @@ function ManageSubjects() {
   const handleDeleteSubject = async (id) => {
     if (!confirm("Are you sure? This will delete all chapters and content related to this subject.")) return;
     try {
-      await quizService.deleteSubject(id);
+      await contentService.deleteSubject(id);
       fetchData();
     } catch (e) { console.error(e); }
   };
@@ -101,7 +102,7 @@ function ManageSubjects() {
   const handleDeleteChapter = async (id) => {
     if (!confirm("Are you sure? This will delete all questions in this chapter.")) return;
     try {
-      await quizService.deleteChapter(id);
+      await contentService.deleteChapter(id);
       fetchData();
     } catch (e) { console.error(e); }
   };

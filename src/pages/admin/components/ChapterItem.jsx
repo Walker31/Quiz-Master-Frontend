@@ -1,6 +1,8 @@
-import FolderOpenIcon from "@mui/icons-material/FolderOpen";
-import QuizIcon from "@mui/icons-material/Quiz";
-import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
+import {
+  FolderOpen as FolderOpenIcon,
+  Quiz as QuizIcon,
+  DeleteOutlined as DeleteOutlinedIcon
+} from "@mui/icons-material";
 
 export function ChapterItem({ chapter, color, quizCount, liveCount, onManageQuestions, onDelete }) {
   return (
