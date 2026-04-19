@@ -291,38 +291,68 @@ const QuizAttemptWindow = () => {
   return (
     <div className="flex h-screen flex-col overflow-hidden" style={{ backgroundColor: NTA.white }}>
       
-      {/* ── HEADER WITH METADATA ── */}
-      <header className="shrink-0 shadow-sm" style={{ backgroundColor: NTA.primary, color: NTA.white, padding: '12px 24px' }}>
-        <div className="flex items-center justify-between mb-3">
-          <h1 className="text-sm font-bold">{attempt?.quiz_info?.title}</h1>
+      {/* ── HEADER WITH EXAM INFO ── */}
+      <header className="shrink-0 shadow-md" style={{ backgroundColor: NTA.primary, color: NTA.white }}>
+        {/* Top Bar - Exam Title & Submit */}
+        <div className="flex items-center justify-between px-6 py-3 border-b" style={{ borderColor: `${NTA.secondary}40` }}>
+          <div>
+            <h1 className="text-base font-bold">{attempt?.quiz_info?.title}</h1>
+            <p className="text-xs opacity-70 mt-0.5">Joint Entrance Examination (Main)</p>
+          </div>
           <button 
             onClick={handleSubmit} 
-            className="px-4 py-1.5 text-xs font-bold rounded transition-all"
+            className="px-6 py-2 text-xs font-bold rounded-lg transition-all hover:shadow-lg active:scale-95"
             style={{ backgroundColor: NTA.danger, color: NTA.white }}
           >
-            SUBMIT
+            SUBMIT EXAM
           </button>
         </div>
-        
-        {/* Metadata Grid */}
-        <div className="grid grid-cols-4 gap-4 text-[11px]">
+
+        {/* Bottom Bar - Metadata Grid */}
+        <div className="px-6 py-3 grid grid-cols-5 gap-6">
+          {/* Exam Duration */}
           <div>
-            <p className="opacity-70 text-xs">Exam</p>
-            <p className="font-bold">JEE (Main)</p>
+            <p className="text-xs font-bold opacity-70 uppercase tracking-wide">Duration</p>
+            <p className="text-sm font-bold mt-1">{attempt?.quiz_info?.duration_mins || 180} mins</p>
           </div>
+
+          {/* Total Questions */}
           <div>
-            <p className="opacity-70 text-xs">Time Remaining</p>
-            <p className="font-bold" style={{ color: timeRemaining < 300 ? NTA.danger : NTA.accent }}>
-              {formatTime(timeRemaining)}
-            </p>
+            <p className="text-xs font-bold opacity-70 uppercase tracking-wide">Questions</p>
+            <p className="text-sm font-bold mt-1">{questions.length}</p>
           </div>
+
+          {/* Total Marks */}
           <div>
-            <p className="opacity-70 text-xs">Total Marks</p>
-            <p className="font-bold">{attempt?.quiz_info?.total_marks || 300}</p>
+            <p className="text-xs font-bold opacity-70 uppercase tracking-wide">Total Marks</p>
+            <p className="text-sm font-bold mt-1">{attempt?.quiz_info?.total_marks || 300}</p>
           </div>
-          <div>
-            <p className="opacity-70 text-xs">Candidate</p>
-            <p className="font-bold">{user?.username?.toUpperCase()}</p>
+
+          {/* Time Remaining - Centered & Highlighted */}
+          <div className="flex flex-col items-center justify-center rounded-lg" style={{ backgroundColor: `${NTA.accent}20`, padding: '8px 12px' }}>
+            <div className="flex items-center gap-2">
+              <TimerIcon style={{ fontSize: '18px', color: timeRemaining < 300 ? NTA.danger : NTA.accent }} />
+              <div>
+                <p className="text-xs font-bold opacity-70 uppercase">Time Left</p>
+                <p className="text-base font-black" style={{ color: timeRemaining < 300 ? NTA.danger : NTA.accent }}>
+                  {formatTime(timeRemaining)}
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Candidate Info Card */}
+          <div className="flex items-center gap-3 rounded-lg" style={{ backgroundColor: `${NTA.white}15`, padding: '8px 12px' }}>
+            <div 
+              className="h-10 w-10 rounded-lg flex items-center justify-center font-bold text-sm"
+              style={{ backgroundColor: NTA.accent, color: NTA.primary }}
+            >
+              {user?.username?.charAt(0).toUpperCase()}
+            </div>
+            <div className="min-w-0">
+              <p className="text-xs font-bold opacity-90">{user?.username?.toUpperCase()}</p>
+              <p className="text-[10px] opacity-70 truncate">ID: {String(user?.id || '').slice(0, 8)}</p>
+            </div>
           </div>
         </div>
       </header>
