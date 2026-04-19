@@ -10,6 +10,15 @@ import {
   Close as CloseIcon,
   Description as DocumentIcon
 } from "@mui/icons-material";
+import {
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Snackbar,
+  Alert,
+  Button
+} from "@mui/material";
 import { useAuth } from "@/context/AuthContext";
 import attemptService from "@/services/attemptService";
 
@@ -45,6 +54,20 @@ const QuizAttemptWindow = () => {
   const [timeRemaining, setTimeRemaining] = useState(0);
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [showInstructions, setShowInstructions] = useState(true);
+
+  // ── Dialog & Snackbar States ──────────────────────────────────────────────
+  const [confirmDialog, setConfirmDialog] = useState({
+    open: false,
+    title: '',
+    message: '',
+    onConfirm: null,
+    type: 'warning' // 'warning' | 'error' | 'success'
+  });
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: '',
+    severity: 'info' // 'success' | 'error' | 'warning' | 'info'
+  });
 
   // ── Fullscreen Management ──────────────────────────────────────────────────
   const handleEnterFullscreen = async () => {
@@ -133,10 +156,21 @@ const QuizAttemptWindow = () => {
   const handleSectionSwitch = (newSectionId) => {
     if (newSectionId === currentSectionId) return;
     if (currentQ && currentResp?.selected_options?.length > 0) {
-      if (!window.confirm("You have unsaved responses. Switch section?")) return;
+      setConfirmDialog({
+        open: true,
+        title: 'Unsaved Responses',
+        message: 'You have unsaved responses in this section. Do you want to switch to another section?',
+        type: 'warning',
+        onConfirm: () => {
+          setCurrentSectionId(newSectionId);
+          setCurrentIdx(0);
+          setConfirmDialog({ ...confirmDialog, open: false });
+        }
+      });
+    } else {
+      setCurrentSectionId(newSectionId);
+      setCurrentIdx(0);
     }
-    setCurrentSectionId(newSectionId);
-    setCurrentIdx(0);
   };
 
   const formatTime = (seconds) => {
@@ -182,13 +216,33 @@ const QuizAttemptWindow = () => {
   };
 
   const handleSubmit = async () => {
-    if (!window.confirm("Are you sure you want to submit the exam?")) return;
-    try {
-      await attemptService.submitAttempt(attemptId);
-      navigate(`/student/result/${attemptId}`);
-    } catch (e) {
-      alert("Submission failed. Please check your connection.");
-    }
+    setConfirmDialog({
+      open: true,
+      title: 'Submit Exam',
+      message: 'Are you sure you want to submit the exam? You cannot make any changes after submission.',
+      type: 'warning',
+      onConfirm: async () => {
+        try {
+          await attemptService.submitAttempt(attemptId);
+          setConfirmDialog({ ...confirmDialog, open: false });
+          setSnackbar({
+            open: true,
+            message: 'Exam submitted successfully!',
+            severity: 'success'
+          });
+          setTimeout(() => {
+            navigate(`/student/result/${attemptId}`);
+          }, 1500);
+        } catch (e) {
+          setConfirmDialog({ ...confirmDialog, open: false });
+          setSnackbar({
+            open: true,
+            message: 'Submission failed. Please check your connection and try again.',
+            severity: 'error'
+          });
+        }
+      }
+    });
   };
 
   if (loading) {
@@ -614,6 +668,77 @@ const QuizAttemptWindow = () => {
           </div>
         </aside>
       </div>
+
+      {/* ── CONFIRMATION DIALOG ── */}
+      <Dialog
+        open={confirmDialog.open}
+        onClose={() => setConfirmDialog({ ...confirmDialog, open: false })}
+        maxWidth="sm"
+        fullWidth
+        PaperProps={{
+          style: {
+            borderRadius: '12px',
+            boxShadow: '0 10px 40px rgba(0,0,0,0.2)'
+          }
+        }}
+      >
+        <DialogTitle 
+          style={{ 
+            backgroundColor: NTA.primary, 
+            color: NTA.white,
+            fontWeight: 'bold',
+            fontSize: '18px',
+            paddingBottom: '16px'
+          }}
+        >
+          {confirmDialog.title}
+        </DialogTitle>
+        <DialogContent style={{ paddingTop: '24px', paddingBottom: '24px' }}>
+          <p style={{ fontSize: '15px', color: NTA.text, lineHeight: '1.6' }}>
+            {confirmDialog.message}
+          </p>
+        </DialogContent>
+        <DialogActions style={{ padding: '16px 24px', gap: '8px' }}>
+          <Button
+            onClick={() => setConfirmDialog({ ...confirmDialog, open: false })}
+            variant="outlined"
+            style={{ color: NTA.primary, borderColor: NTA.primary }}
+          >
+            Cancel
+          </Button>
+          <Button
+            onClick={confirmDialog.onConfirm}
+            variant="contained"
+            style={{ 
+              backgroundColor: confirmDialog.type === 'warning' ? NTA.warning : NTA.danger,
+              color: NTA.white
+            }}
+          >
+            Confirm
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* ── SNACKBAR NOTIFICATIONS ── */}
+      <Snackbar
+        open={snackbar.open}
+        autoHideDuration={4000}
+        onClose={() => setSnackbar({ ...snackbar, open: false })}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+      >
+        <Alert
+          onClose={() => setSnackbar({ ...snackbar, open: false })}
+          severity={snackbar.severity}
+          variant="filled"
+          style={{
+            fontSize: '14px',
+            fontWeight: '500',
+            borderRadius: '8px'
+          }}
+        >
+          {snackbar.message}
+        </Alert>
+      </Snackbar>
     </div>
   );
 };
