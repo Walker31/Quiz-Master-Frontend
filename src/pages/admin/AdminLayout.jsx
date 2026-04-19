@@ -34,7 +34,7 @@ function AdminLayout() {
       className={({ isActive }) =>
         `flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
           isActive
-            ? 'bg-[var(--color-accent-light)] text-[var(--color-accent)]'
+            ? 'bg-(--color-accent-light) text-(--color-accent)'
             : (isDark ? 'text-[#9ca3af] hover:text-white hover:bg-[#253044]' : 'text-[#5c6577] hover:text-[#1a1f36] hover:bg-[#eef0f5]')
         }`
       }
@@ -71,7 +71,7 @@ function AdminLayout() {
             <p className="theme-text-muted text-[11px] font-bold uppercase tracking-wider px-3">Admin Panel</p>
             <button
               onClick={() => setSidebarOpen(false)}
-              className="md:hidden flex h-8 w-8 items-center justify-center rounded-lg transition-colors hover:bg-[var(--color-bg-tertiary)] theme-text-muted"
+              className="md:hidden flex h-8 w-8 items-center justify-center rounded-lg transition-colors hover:bg-(--color-bg-tertiary) theme-text-muted"
               aria-label="Close sidebar"
             >
               <CloseIcon fontSize="small" />
@@ -94,7 +94,7 @@ function AdminLayout() {
       {/* ── Main Content ── */}
       <main className="flex-1 md:ml-60 overflow-y-auto">
         {/* Mobile-only top bar with hamburger */}
-        <div className="md:hidden flex items-center gap-3 px-4 py-3 border-b border-[var(--color-border)]">
+        <div className="md:hidden flex items-center gap-3 px-4 py-3 border-b border-(--color-border)">
           <button
             onClick={() => setSidebarOpen(true)}
             className={`flex h-9 w-9 items-center justify-center rounded-lg border transition-colors

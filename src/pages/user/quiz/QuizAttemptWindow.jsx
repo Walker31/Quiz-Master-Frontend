@@ -500,11 +500,10 @@ const QuizAttemptWindow = () => {
           {/* Palette Grid - 5 Columns per NTA Standard */}
           <div className="flex-1 overflow-y-auto p-4">
             <div className="grid grid-cols-5 gap-2 mb-6">
-              {questions.map((q, idx) => {
+              {questions.filter(q => q.section === currentSectionId).map((q, qIdx) => {
                 const resp = responses[q.id];
-                const isCurrent = q.section === currentSectionId && idx === currentIdx;
-                const sectionQs = questions.filter(x => x.section === q.section);
-                const qNum = sectionQs.findIndex(x => x.id === q.id) + 1;
+                const isCurrent = qIdx === currentIdx;
+                const qNum = qIdx + 1;
                 
                 let bgColor = NTA.white;
                 let textColor = NTA.lightText;
@@ -528,10 +527,7 @@ const QuizAttemptWindow = () => {
                   <button 
                     key={q.id}
                     onClick={() => {
-                      if (q.section !== currentSectionId) {
-                        setCurrentSectionId(q.section);
-                      }
-                      setCurrentIdx(sectionQs.findIndex(x => x.id === q.id));
+                      setCurrentIdx(qIdx);
                     }}
                     className={`flex h-9 items-center justify-center rounded font-bold text-xs transition-all ${
                       isCurrent ? 'ring-2 scale-110 shadow-lg' : ''
