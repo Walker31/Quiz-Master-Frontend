@@ -1,0 +1,1054 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JEE Main Question Paper</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Source+Sans+3:wght@400;500;600;700&display=swap');
+
+  :root {
+    --blue-dark: #0a2a6e;
+    --blue-mid: #1a4da0;
+    --blue-light: #dce8f8;
+    --gold: #c8950a;
+    --gold-light: #fdf3d6;
+    --red: #c0392b;
+    --green: #1a7a3a;
+    --text: #1a1a1a;
+    --muted: #555;
+    --border: #b0bed4;
+    --bg: #f5f7fa;
+    --white: #ffffff;
+    --section-bg: #eaf0fa;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Source Sans 3', Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  /* ── PRINT STYLES ── */
+  @media print {
+    body { background: white; font-size: 12px; }
+    .no-print { display: none !important; }
+    .page { box-shadow: none; margin: 0; padding: 20px; max-width: 100%; }
+    .question-card { break-inside: avoid; }
+    header { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+  }
+
+  /* ── TOOLBAR ── */
+  .toolbar {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--blue-dark);
+    color: white;
+    padding: 10px 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+  }
+  .toolbar h2 { font-size: 15px; font-weight: 600; flex: 1; }
+  .toolbar button {
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.3);
+    color: white;
+    padding: 6px 14px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 13px;
+    font-family: inherit;
+    transition: background 0.15s;
+  }
+  .toolbar button:hover { background: rgba(255,255,255,0.28); }
+  .toolbar button.primary { background: var(--gold); border-color: var(--gold); color: #1a0f00; font-weight: 600; }
+
+  /* ── PAGE ── */
+  .page {
+    max-width: 860px;
+    margin: 24px auto;
+    background: white;
+    box-shadow: 0 2px 20px rgba(0,0,0,0.12);
+    padding: 0;
+    border: 1px solid var(--border);
+  }
+
+  /* ── HEADER ── */
+  header {
+    background: var(--blue-dark);
+    color: white;
+    padding: 0;
+  }
+  .header-top {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    padding: 16px 28px;
+    border-bottom: 2px solid var(--gold);
+  }
+  .emblem {
+    width: 60px;
+    height: 60px;
+    flex-shrink: 0;
+  }
+  .header-title h1 {
+    font-family: 'EB Garamond', Georgia, serif;
+    font-size: 22px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+  }
+  .header-title p {
+    font-size: 12px;
+    color: rgba(255,255,255,0.75);
+    margin-top: 2px;
+  }
+  .header-meta {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+    background: var(--blue-mid);
+    font-size: 12px;
+  }
+  .meta-item {
+    padding: 9px 16px;
+    border-right: 1px solid rgba(255,255,255,0.15);
+    text-align: center;
+  }
+  .meta-item:last-child { border-right: none; }
+  .meta-item .label { color: rgba(255,255,255,0.65); font-size: 10px; text-transform: uppercase; letter-spacing: 0.8px; }
+  .meta-item .value { font-weight: 600; font-size: 13px; margin-top: 2px; }
+
+  /* ── INSTRUCTIONS ── */
+  .instructions {
+    background: var(--gold-light);
+    border: 1px solid #e8c96b;
+    border-left: 4px solid var(--gold);
+    margin: 20px 24px;
+    padding: 14px 18px;
+    border-radius: 2px;
+    font-size: 13px;
+  }
+  .instructions h3 {
+    color: var(--gold);
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+  .instructions ol { padding-left: 18px; }
+  .instructions li { margin-bottom: 5px; color: #4a3800; }
+
+  /* ── MARKING SCHEME ── */
+  .marking-box {
+    display: flex;
+    gap: 12px;
+    margin: 0 24px 20px;
+    flex-wrap: wrap;
+  }
+  .mark-card {
+    flex: 1;
+    min-width: 140px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 10px 14px;
+    background: var(--section-bg);
+  }
+  .mark-card .mark-title { font-size: 11px; text-transform: uppercase; letter-spacing: 0.8px; color: var(--muted); }
+  .mark-card .mark-vals { display: flex; gap: 12px; margin-top: 6px; }
+  .mark-val { text-align: center; }
+  .mark-val .num { font-size: 18px; font-weight: 700; font-family: 'EB Garamond', serif; }
+  .mark-val .num.correct { color: var(--green); }
+  .mark-val .num.wrong { color: var(--red); }
+  .mark-val .sub { font-size: 10px; color: var(--muted); }
+
+  /* ── SECTION DIVIDER ── */
+  .section-header {
+    background: var(--blue-dark);
+    color: white;
+    padding: 10px 24px;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 8px;
+  }
+  .section-header .section-info { font-size: 11px; color: rgba(255,255,255,0.7); font-weight: 400; }
+
+  /* ── QUESTION CARD ── */
+  .questions-wrap { padding: 0 24px 28px; }
+
+  .question-card {
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    margin-top: 14px;
+    overflow: hidden;
+  }
+  .question-card:first-child { margin-top: 10px; }
+
+  .q-header {
+    background: var(--section-bg);
+    padding: 8px 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border);
+  }
+  .q-num {
+    font-weight: 700;
+    font-size: 13px;
+    color: var(--blue-dark);
+    font-family: 'EB Garamond', serif;
+  }
+  .q-tag {
+    font-size: 10px;
+    background: var(--blue-mid);
+    color: white;
+    padding: 2px 8px;
+    border-radius: 20px;
+    font-weight: 500;
+  }
+  .q-tag.integer { background: #6b35a0; }
+  .q-tag.numeric { background: #0a6e5a; }
+
+  .q-body { padding: 14px 16px; }
+  .q-text {
+    font-size: 14px;
+    line-height: 1.7;
+    color: var(--text);
+    margin-bottom: 14px;
+    font-family: 'EB Garamond', serif;
+    font-size: 15.5px;
+  }
+
+  /* ── MCQ OPTIONS ── */
+  .options { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .option {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 9px 12px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s;
+    user-select: none;
+  }
+  .option:hover { border-color: var(--blue-mid); background: var(--blue-light); }
+  .option.selected { border-color: var(--blue-mid); background: var(--blue-light); }
+  .option.correct-ans { border-color: var(--green); background: #e6f5eb; }
+  .option.wrong-ans { border-color: var(--red); background: #fceaea; }
+
+  .opt-label {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    border: 1.5px solid var(--blue-mid);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--blue-mid);
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .option.selected .opt-label { background: var(--blue-mid); color: white; }
+  .option.correct-ans .opt-label { background: var(--green); border-color: var(--green); color: white; }
+  .option.wrong-ans .opt-label { background: var(--red); border-color: var(--red); color: white; }
+
+  .opt-text { font-family: 'EB Garamond', serif; font-size: 15px; line-height: 1.5; }
+
+  /* ── INTEGER / NUMERIC TYPE ── */
+  .integer-input {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 6px;
+  }
+  .integer-input label { font-size: 13px; color: var(--muted); }
+  .integer-input input {
+    width: 120px;
+    padding: 7px 10px;
+    border: 1.5px solid var(--border);
+    border-radius: 4px;
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 15px;
+    text-align: center;
+    color: var(--text);
+    transition: border-color 0.15s;
+  }
+  .integer-input input:focus { outline: none; border-color: var(--blue-mid); }
+
+  /* ── IMAGE PLACEHOLDER ── */
+  .q-image {
+    background: var(--section-bg);
+    border: 1px dashed var(--border);
+    border-radius: 4px;
+    padding: 20px;
+    text-align: center;
+    color: var(--muted);
+    margin-bottom: 12px;
+    font-size: 12px;
+  }
+  .q-image img { max-width: 100%; max-height: 200px; display: block; margin: 0 auto; }
+
+  /* ── STATUS ── */
+  .q-status {
+    display: flex;
+    gap: 8px;
+    padding: 8px 14px;
+    border-top: 1px solid var(--border);
+    background: #fafbfd;
+    font-size: 11px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .status-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    display: inline-block;
+  }
+  .dot-answered { background: var(--green); }
+  .dot-marked { background: #7b1fa2; }
+  .dot-skipped { background: #aaa; }
+  .dot-review { background: #e67e22; }
+
+  /* ── LEGEND ── */
+  .legend {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    padding: 12px 24px;
+    border-top: 1px solid var(--border);
+    font-size: 12px;
+    background: #fafbfd;
+    margin-top: 20px;
+  }
+  .legend-item { display: flex; align-items: center; gap: 6px; }
+
+  /* ── PAGINATION / PALETTE ── */
+  .question-palette {
+    position: fixed;
+    right: 20px;
+    top: 80px;
+    width: 200px;
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.12);
+    z-index: 50;
+    overflow: hidden;
+    font-size: 12px;
+  }
+  .palette-title {
+    background: var(--blue-dark);
+    color: white;
+    padding: 8px 12px;
+    font-weight: 600;
+    font-size: 12px;
+  }
+  .palette-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 4px;
+    padding: 10px;
+    max-height: 340px;
+    overflow-y: auto;
+  }
+  .palette-btn {
+    width: 30px;
+    height: 30px;
+    border: 1.5px solid var(--border);
+    border-radius: 4px;
+    background: var(--section-bg);
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text);
+    transition: background 0.1s;
+  }
+  .palette-btn:hover { background: var(--blue-light); border-color: var(--blue-mid); }
+  .palette-btn.answered { background: #c8ecd4; border-color: var(--green); color: #0a3d1a; }
+  .palette-btn.current { background: var(--blue-mid); border-color: var(--blue-dark); color: white; }
+  .palette-btn.marked { background: #e8d5f5; border-color: #7b1fa2; }
+
+  /* ── FOOTER ── */
+  footer {
+    border-top: 2px solid var(--blue-dark);
+    padding: 14px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--section-bg);
+    font-size: 12px;
+    color: var(--muted);
+  }
+  .footer-btns { display: flex; gap: 10px; }
+  .btn {
+    padding: 8px 20px;
+    border-radius: 4px;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    border: 1.5px solid;
+    transition: 0.15s;
+  }
+  .btn-outline { background: white; border-color: var(--blue-mid); color: var(--blue-mid); }
+  .btn-outline:hover { background: var(--blue-light); }
+  .btn-solid { background: var(--blue-dark); border-color: var(--blue-dark); color: white; }
+  .btn-solid:hover { background: var(--blue-mid); }
+  .btn-submit { background: var(--green); border-color: var(--green); color: white; }
+
+  /* ── TIMER ── */
+  .timer {
+    font-size: 22px;
+    font-family: 'EB Garamond', serif;
+    font-weight: 600;
+    color: var(--blue-dark);
+    text-align: center;
+    padding: 6px 0 2px;
+  }
+  .timer.warning { color: var(--red); animation: blink 1s step-end infinite; }
+  @keyframes blink { 50% { opacity: 0.5; } }
+
+  /* Responsive */
+  @media (max-width: 700px) {
+    .question-palette { display: none; }
+    .options { grid-template-columns: 1fr; }
+    .header-meta { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  /* ── EDITOR MODE ── */
+  .editor-panel {
+    background: #1e2a40;
+    color: #c8d8f0;
+    padding: 20px 24px;
+    font-family: 'Source Code Pro', 'Courier New', monospace;
+    font-size: 13px;
+    border-top: 3px solid var(--gold);
+    display: none;
+  }
+  .editor-panel.open { display: block; }
+  .editor-panel h3 { color: var(--gold); margin-bottom: 12px; font-family: 'Source Sans 3', sans-serif; font-size: 13px; letter-spacing: 1px; text-transform: uppercase; }
+  .editor-panel textarea {
+    width: 100%;
+    min-height: 180px;
+    background: #111a2a;
+    color: #b8e0ff;
+    border: 1px solid #3a5080;
+    border-radius: 4px;
+    padding: 12px;
+    font-family: inherit;
+    font-size: 12px;
+    resize: vertical;
+    line-height: 1.6;
+  }
+  .editor-panel .ed-row { display: flex; gap: 10px; margin-top: 10px; flex-wrap: wrap; }
+  .ed-btn {
+    padding: 7px 16px;
+    border-radius: 4px;
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    border: 1px solid #3a5080;
+    background: #2a3d5e;
+    color: #c8d8f0;
+    transition: 0.15s;
+  }
+  .ed-btn:hover { background: #3a5080; }
+  .ed-btn.gold { background: var(--gold); border-color: var(--gold); color: #1a0f00; }
+
+  .no-print.editor-controls {
+    text-align: center;
+    padding: 10px 24px;
+    background: #f0f4fa;
+    border-top: 1px solid var(--border);
+  }
+</style>
+</head>
+<body>
+
+<!-- TOOLBAR -->
+<div class="toolbar no-print">
+  <h2>JEE Main — Question Paper</h2>
+  <div class="timer" id="timer">03:00:00</div>
+  <button onclick="toggleEditor()">✏️ Edit Paper</button>
+  <button onclick="showAnswers()">✅ Show Answers</button>
+  <button onclick="window.print()" class="primary">🖨️ Print / Save PDF</button>
+</div>
+
+<!-- PAGE -->
+<div class="page">
+
+  <!-- HEADER -->
+  <header>
+    <div class="header-top">
+      <svg class="emblem" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="30" cy="30" r="28" fill="none" stroke="#c8950a" stroke-width="2"/>
+        <circle cx="30" cy="30" r="22" fill="none" stroke="#c8950a" stroke-width="1"/>
+        <text x="30" y="26" text-anchor="middle" fill="#c8950a" font-size="10" font-weight="bold" font-family="serif">NTA</text>
+        <text x="30" y="36" text-anchor="middle" fill="#c8950a" font-size="6" font-family="sans-serif">NATIONAL</text>
+        <text x="30" y="43" text-anchor="middle" fill="#c8950a" font-size="6" font-family="sans-serif">TESTING</text>
+        <text x="30" y="50" text-anchor="middle" fill="#c8950a" font-size="6" font-family="sans-serif">AGENCY</text>
+      </svg>
+      <div class="header-title">
+        <h1 id="paper-title">Joint Entrance Examination (Main) — 2025</h1>
+        <p id="paper-subtitle">Paper 1 (B.E./B.Tech) &nbsp;|&nbsp; Session 1</p>
+      </div>
+    </div>
+    <div class="header-meta">
+      <div class="meta-item">
+        <div class="label">Date</div>
+        <div class="value" id="paper-date">22 January 2025</div>
+      </div>
+      <div class="meta-item">
+        <div class="label">Shift</div>
+        <div class="value" id="paper-shift">Morning (9:00 – 12:00)</div>
+      </div>
+      <div class="meta-item">
+        <div class="label">Total Marks</div>
+        <div class="value" id="total-marks">300</div>
+      </div>
+      <div class="meta-item">
+        <div class="label">Duration</div>
+        <div class="value" id="paper-duration">3 Hours</div>
+      </div>
+    </div>
+  </header>
+
+  <!-- INSTRUCTIONS -->
+  <div class="instructions">
+    <h3>General Instructions</h3>
+    <ol>
+      <li>This question paper contains <strong>90 questions</strong> divided equally into Physics, Chemistry, and Mathematics.</li>
+      <li>Each subject has <strong>20 MCQ</strong> (Single Correct) and <strong>10 Numerical Value</strong> (integer) questions.</li>
+      <li>All questions are compulsory. No negative marking for numerical value type.</li>
+      <li>Use of calculator or any electronic device is strictly prohibited.</li>
+      <li>Mark your answers carefully. A submitted answer cannot be revised.</li>
+    </ol>
+  </div>
+
+  <!-- MARKING SCHEME -->
+  <div class="marking-box">
+    <div class="mark-card">
+      <div class="mark-title">MCQ (Single Correct)</div>
+      <div class="mark-vals">
+        <div class="mark-val"><div class="num correct">+4</div><div class="sub">Correct</div></div>
+        <div class="mark-val"><div class="num wrong">−1</div><div class="sub">Wrong</div></div>
+        <div class="mark-val"><div class="num">0</div><div class="sub">Skipped</div></div>
+      </div>
+    </div>
+    <div class="mark-card">
+      <div class="mark-title">Integer / Numerical</div>
+      <div class="mark-vals">
+        <div class="mark-val"><div class="num correct">+4</div><div class="sub">Correct</div></div>
+        <div class="mark-val"><div class="num">0</div><div class="sub">Wrong</div></div>
+        <div class="mark-val"><div class="num">0</div><div class="sub">Skipped</div></div>
+      </div>
+    </div>
+    <div class="mark-card">
+      <div class="mark-title">Score Summary</div>
+      <div class="mark-vals">
+        <div class="mark-val"><div class="num" id="score-display" style="font-size:18px;color:var(--blue-dark)">0</div><div class="sub">Score</div></div>
+        <div class="mark-val"><div class="num" id="attempted-display" style="font-size:18px;color:var(--muted)">0/90</div><div class="sub">Attempted</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== PHYSICS SECTION ===== -->
+  <div class="section-header">
+    SECTION A — PHYSICS
+    <span class="section-info">Questions 1–20 · MCQ · +4 / −1</span>
+  </div>
+
+  <div class="questions-wrap" id="physics-mcq">
+    <!-- QUESTION CARD TEMPLATE (MCQ) -->
+    <div class="question-card" data-q="1" data-type="mcq" data-correct="C">
+      <div class="q-header">
+        <span class="q-num">Q. 1</span>
+        <span class="q-tag">MCQ</span>
+      </div>
+      <div class="q-body">
+        <div class="q-text">
+          A particle moves in a straight line with uniform acceleration. Its velocity at time <em>t</em> = 0 is 5 m/s and at <em>t</em> = 4 s it is 21 m/s. The distance covered in the 3rd second of motion is:
+        </div>
+        <div class="options">
+          <div class="option" onclick="selectOption(this, 'A')" data-val="A">
+            <div class="opt-label">A</div>
+            <div class="opt-text">12 m</div>
+          </div>
+          <div class="option" onclick="selectOption(this, 'B')" data-val="B">
+            <div class="opt-label">B</div>
+            <div class="opt-text">13 m</div>
+          </div>
+          <div class="option" onclick="selectOption(this, 'C')" data-val="C">
+            <div class="opt-label">C</div>
+            <div class="opt-text">15 m</div>
+          </div>
+          <div class="option" onclick="selectOption(this, 'D')" data-val="D">
+            <div class="opt-label">D</div>
+            <div class="opt-text">17 m</div>
+          </div>
+        </div>
+      </div>
+      <div class="q-status">
+        <span class="status-dot dot-skipped"></span>
+        <span class="status-label">Not Attempted</span>
+      </div>
+    </div>
+
+    <div class="question-card" data-q="2" data-type="mcq" data-correct="B">
+      <div class="q-header">
+        <span class="q-num">Q. 2</span>
+        <span class="q-tag">MCQ</span>
+      </div>
+      <div class="q-body">
+        <div class="q-text">
+          The dimensional formula of angular momentum is:
+        </div>
+        <div class="options">
+          <div class="option" onclick="selectOption(this, 'A')" data-val="A">
+            <div class="opt-label">A</div>
+            <div class="opt-text">[ML²T⁻¹]</div>
+          </div>
+          <div class="option" onclick="selectOption(this, 'B')" data-val="B">
+            <div class="opt-label">B</div>
+            <div class="opt-text">[ML²T⁻¹]</div>
+          </div>
+          <div class="option" onclick="selectOption(this, 'C')" data-val="C">
+            <div class="opt-label">C</div>
+            <div class="opt-text">[MLT⁻]</div>
+          </div>
+          <div class="option" onclick="selectOption(this, 'D')" data-val="D">
+            <div class="opt-label">D</div>
+            <div class="opt-text">[M²L²T⁻²]</div>
+          </div>
+        </div>
+      </div>
+      <div class="q-status">
+        <span class="status-dot dot-skipped"></span>
+        <span class="status-label">Not Attempted</span>
+      </div>
+    </div>
+
+  </div><!-- /physics-mcq -->
+
+  <!-- Physics Integer Section -->
+  <div class="section-header">
+    SECTION B — PHYSICS (Integer / Numerical)
+    <span class="section-info">Questions 21–30 · Integer · +4 / 0</span>
+  </div>
+  <div class="questions-wrap" id="physics-int">
+
+    <div class="question-card" data-q="21" data-type="integer" data-correct="12">
+      <div class="q-header">
+        <span class="q-num">Q. 21</span>
+        <span class="q-tag integer">Integer</span>
+      </div>
+      <div class="q-body">
+        <div class="q-text">
+          A body of mass 2 kg moves with velocity 6 m/s. A force of 4 N acts on it in the direction of motion for 3 seconds. The final kinetic energy (in Joules) of the body is _______.
+        </div>
+        <div class="integer-input">
+          <label>Answer:</label>
+          <input type="number" placeholder="Enter integer" oninput="updateInteger(this)" />
+        </div>
+      </div>
+      <div class="q-status">
+        <span class="status-dot dot-skipped"></span>
+        <span class="status-label">Not Attempted</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ===== CHEMISTRY SECTION ===== -->
+  <div class="section-header">
+    SECTION A — CHEMISTRY
+    <span class="section-info">Questions 31–50 · MCQ · +4 / −1</span>
+  </div>
+  <div class="questions-wrap" id="chemistry-mcq">
+
+    <div class="question-card" data-q="31" data-type="mcq" data-correct="A">
+      <div class="q-header">
+        <span class="q-num">Q. 31</span>
+        <span class="q-tag">MCQ</span>
+      </div>
+      <div class="q-body">
+        <div class="q-text">
+          Which of the following has the highest bond order?
+        </div>
+        <div class="options">
+          <div class="option" onclick="selectOption(this, 'A')" data-val="A">
+            <div class="opt-label">A</div>
+            <div class="opt-text">N₂</div>
+          </div>
+          <div class="option" onclick="selectOption(this, 'B')" data-val="B">
+            <div class="opt-label">B</div>
+            <div class="opt-text">O₂</div>
+          </div>
+          <div class="option" onclick="selectOption(this, 'C')" data-val="C">
+            <div class="opt-label">C</div>
+            <div class="opt-text">F₂</div>
+          </div>
+          <div class="option" onclick="selectOption(this, 'D')" data-val="D">
+            <div class="opt-label">D</div>
+            <div class="opt-text">Cl₂</div>
+          </div>
+        </div>
+      </div>
+      <div class="q-status">
+        <span class="status-dot dot-skipped"></span>
+        <span class="status-label">Not Attempted</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ===== MATHEMATICS SECTION ===== -->
+  <div class="section-header">
+    SECTION A — MATHEMATICS
+    <span class="section-info">Questions 61–80 · MCQ · +4 / −1</span>
+  </div>
+  <div class="questions-wrap" id="mathematics-mcq">
+
+    <div class="question-card" data-q="61" data-type="mcq" data-correct="C">
+      <div class="q-header">
+        <span class="q-num">Q. 61</span>
+        <span class="q-tag">MCQ</span>
+      </div>
+      <div class="q-body">
+        <div class="q-text">
+          If the roots of the equation <em>x</em>² − 5<em>x</em> + 6 = 0 are <em>α</em> and <em>β</em>, then the value of α² + β² is:
+        </div>
+        <div class="options">
+          <div class="option" onclick="selectOption(this, 'A')" data-val="A">
+            <div class="opt-label">A</div>
+            <div class="opt-text">11</div>
+          </div>
+          <div class="option" onclick="selectOption(this, 'B')" data-val="B">
+            <div class="opt-label">B</div>
+            <div class="opt-text">12</div>
+          </div>
+          <div class="option" onclick="selectOption(this, 'C')" data-val="C">
+            <div class="opt-label">C</div>
+            <div class="opt-text">13</div>
+          </div>
+          <div class="option" onclick="selectOption(this, 'D')" data-val="D">
+            <div class="opt-label">D</div>
+            <div class="opt-text">14</div>
+          </div>
+        </div>
+      </div>
+      <div class="q-status">
+        <span class="status-dot dot-skipped"></span>
+        <span class="status-label">Not Attempted</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- LEGEND -->
+  <div class="legend no-print">
+    <div class="legend-item"><span class="status-dot dot-answered"></span> Answered</div>
+    <div class="legend-item"><span class="status-dot dot-skipped"></span> Not Attempted</div>
+    <div class="legend-item"><span class="status-dot dot-marked"></span> Marked for Review</div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <span>NTA JEE Main — All rights reserved</span>
+    <div class="footer-btns no-print">
+      <button class="btn btn-outline" onclick="clearAll()">Clear All</button>
+      <button class="btn btn-submit" onclick="submitPaper()">Submit Paper</button>
+    </div>
+  </footer>
+
+</div><!-- /page -->
+
+<!-- QUESTION PALETTE (fixed) -->
+<div class="question-palette no-print" id="palette">
+  <div class="palette-title">Question Palette</div>
+  <div class="palette-grid" id="palette-grid"></div>
+</div>
+
+<!-- EDITOR PANEL -->
+<div class="editor-panel" id="editor-panel">
+  <h3>📝 Add / Edit Questions (JSON Format)</h3>
+  <textarea id="q-json" placeholder='{
+  "section": "physics",       // physics | chemistry | mathematics
+  "type": "mcq",              // mcq | integer
+  "qnum": 3,
+  "text": "Your question text here...",
+  "options": ["Option A text", "Option B text", "Option C text", "Option D text"],
+  "correct": "B",             // A/B/C/D for MCQ, or number for integer
+  "image": ""                 // optional image URL
+}'></textarea>
+  <div class="ed-row">
+    <button class="ed-btn gold" onclick="addQuestionFromJSON()">+ Add Question</button>
+    <button class="ed-btn" onclick="loadSampleJSON()">Load Sample</button>
+    <button class="ed-btn" onclick="toggleEditor()">Close</button>
+  </div>
+  <div style="margin-top:12px; color:#8ab0d8; font-size:11px; line-height:1.8;">
+    <strong style="color:#c8950a;">Quick format:</strong> Fill in the JSON above and click Add Question.<br>
+    <strong style="color:#c8950a;">Paper info:</strong> Edit title, date, shift directly by clicking on them in the header.
+  </div>
+</div>
+
+<!-- QUICK EDIT CONTROLS -->
+<div class="no-print editor-controls">
+  <small style="color:#888;">Click any text in the header to edit it directly. Use the Edit Paper button to add questions via JSON.</small>
+</div>
+
+<script>
+// ── STATE ──
+let timerSecs = 3 * 60 * 60;
+let timerInterval;
+let answersVisible = false;
+
+// ── TIMER ──
+function startTimer() {
+  timerInterval = setInterval(() => {
+    timerSecs--;
+    const h = String(Math.floor(timerSecs / 3600)).padStart(2, '0');
+    const m = String(Math.floor((timerSecs % 3600) / 60)).padStart(2, '0');
+    const s = String(timerSecs % 60).padStart(2, '0');
+    const el = document.getElementById('timer');
+    el.textContent = `${h}:${m}:${s}`;
+    if (timerSecs <= 300) el.classList.add('warning');
+    if (timerSecs <= 0) { clearInterval(timerInterval); submitPaper(); }
+  }, 1000);
+}
+startTimer();
+
+// ── OPTION SELECT ──
+function selectOption(el, val) {
+  const card = el.closest('.question-card');
+  card.querySelectorAll('.option').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+  const status = card.querySelector('.q-status');
+  status.querySelector('.status-dot').className = 'status-dot dot-answered';
+  status.querySelector('.status-label').textContent = 'Answered';
+  card.dataset.selected = val;
+  updatePalette();
+  updateScore();
+}
+
+// ── INTEGER UPDATE ──
+function updateInteger(inp) {
+  const card = inp.closest('.question-card');
+  const status = card.querySelector('.q-status');
+  if (inp.value.trim() !== '') {
+    status.querySelector('.status-dot').className = 'status-dot dot-answered';
+    status.querySelector('.status-label').textContent = `Answered: ${inp.value}`;
+    card.dataset.selected = inp.value.trim();
+  } else {
+    status.querySelector('.status-dot').className = 'status-dot dot-skipped';
+    status.querySelector('.status-label').textContent = 'Not Attempted';
+    delete card.dataset.selected;
+  }
+  updatePalette();
+  updateScore();
+}
+
+// ── SCORE ──
+function updateScore() {
+  const cards = document.querySelectorAll('.question-card');
+  let score = 0, attempted = 0;
+  cards.forEach(c => {
+    if (!c.dataset.selected) return;
+    attempted++;
+    const correct = c.dataset.correct;
+    const sel = c.dataset.selected;
+    if (c.dataset.type === 'mcq') {
+      score += sel === correct ? 4 : -1;
+    } else {
+      score += parseInt(sel) === parseInt(correct) ? 4 : 0;
+    }
+  });
+  document.getElementById('score-display').textContent = score;
+  document.getElementById('attempted-display').textContent = `${attempted}/${cards.length}`;
+}
+
+// ── SHOW ANSWERS ──
+function showAnswers() {
+  answersVisible = !answersVisible;
+  document.querySelectorAll('.question-card[data-type="mcq"]').forEach(card => {
+    const correct = card.dataset.correct;
+    const selected = card.dataset.selected;
+    card.querySelectorAll('.option').forEach(o => {
+      o.classList.remove('correct-ans', 'wrong-ans');
+      if (answersVisible) {
+        if (o.dataset.val === correct) o.classList.add('correct-ans');
+        else if (o.dataset.val === selected && selected !== correct) o.classList.add('wrong-ans');
+      }
+    });
+  });
+}
+
+// ── CLEAR ALL ──
+function clearAll() {
+  if (!confirm('Clear all answers?')) return;
+  document.querySelectorAll('.question-card').forEach(card => {
+    delete card.dataset.selected;
+    card.querySelectorAll('.option').forEach(o => o.classList.remove('selected', 'correct-ans', 'wrong-ans'));
+    const inp = card.querySelector('input[type="number"]');
+    if (inp) inp.value = '';
+    const status = card.querySelector('.q-status');
+    status.querySelector('.status-dot').className = 'status-dot dot-skipped';
+    status.querySelector('.status-label').textContent = 'Not Attempted';
+  });
+  updatePalette();
+  updateScore();
+}
+
+// ── SUBMIT ──
+function submitPaper() {
+  const cards = document.querySelectorAll('.question-card');
+  let attempted = 0;
+  cards.forEach(c => { if (c.dataset.selected) attempted++; });
+  if (confirm(`Submit paper? Attempted: ${attempted}/${cards.length}`)) {
+    clearInterval(timerInterval);
+    showAnswers();
+    alert('Paper submitted! Check highlighted answers.');
+  }
+}
+
+// ── PALETTE ──
+function buildPalette() {
+  const grid = document.getElementById('palette-grid');
+  grid.innerHTML = '';
+  document.querySelectorAll('.question-card').forEach(card => {
+    const btn = document.createElement('div');
+    btn.className = 'palette-btn';
+    btn.textContent = card.dataset.q;
+    btn.onclick = () => card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    btn.id = `pb-${card.dataset.q}`;
+    grid.appendChild(btn);
+  });
+}
+
+function updatePalette() {
+  document.querySelectorAll('.question-card').forEach(card => {
+    const btn = document.getElementById(`pb-${card.dataset.q}`);
+    if (!btn) return;
+    btn.className = 'palette-btn' + (card.dataset.selected ? ' answered' : '');
+  });
+}
+
+buildPalette();
+
+// ── EDITOR ──
+function toggleEditor() {
+  const panel = document.getElementById('editor-panel');
+  panel.classList.toggle('open');
+}
+
+function loadSampleJSON() {
+  document.getElementById('q-json').value = JSON.stringify({
+    section: "mathematics",
+    type: "mcq",
+    qnum: 62,
+    text: "The value of ∫₀¹ x² dx is:",
+    options: ["1/4", "1/3", "1/2", "1"],
+    correct: "B",
+    image: ""
+  }, null, 2);
+}
+
+function addQuestionFromJSON() {
+  const raw = document.getElementById('q-json').value.trim();
+  let q;
+  try {
+    const clean = raw.replace(/\/\/.*$/gm, '').replace(/,\s*([}\]])/g, '$1');
+    q = JSON.parse(clean);
+  } catch(e) {
+    alert('Invalid JSON. Please check your format.\n' + e.message);
+    return;
+  }
+
+  const sectionMap = {
+    physics: 'physics-mcq',
+    chemistry: 'chemistry-mcq',
+    mathematics: 'mathematics-mcq'
+  };
+
+  let containerId = sectionMap[q.section];
+  if (q.type === 'integer') containerId = q.section === 'physics' ? 'physics-int' : containerId;
+  const container = document.getElementById(containerId) || document.getElementById('mathematics-mcq');
+
+  const card = document.createElement('div');
+  card.className = 'question-card';
+  card.dataset.q = q.qnum;
+  card.dataset.type = q.type;
+  card.dataset.correct = String(q.correct);
+
+  const optTag = q.type === 'integer' ? 'integer' : 'MCQ';
+  const optClass = q.type === 'integer' ? 'integer' : '';
+
+  let bodyHTML = `<div class="q-text">${q.text}</div>`;
+  if (q.image) bodyHTML += `<div class="q-image"><img src="${q.image}" alt="Question figure"/></div>`;
+
+  if (q.type === 'mcq' && q.options) {
+    const labs = ['A','B','C','D'];
+    bodyHTML += `<div class="options">` +
+      q.options.map((opt, i) => `
+        <div class="option" onclick="selectOption(this,'${labs[i]}')" data-val="${labs[i]}">
+          <div class="opt-label">${labs[i]}</div>
+          <div class="opt-text">${opt}</div>
+        </div>`).join('') +
+      `</div>`;
+  } else if (q.type === 'integer') {
+    bodyHTML += `<div class="integer-input"><label>Answer:</label><input type="number" placeholder="Enter integer" oninput="updateInteger(this)"/></div>`;
+  }
+
+  card.innerHTML = `
+    <div class="q-header">
+      <span class="q-num">Q. ${q.qnum}</span>
+      <span class="q-tag ${optClass}">${optTag}</span>
+    </div>
+    <div class="q-body">${bodyHTML}</div>
+    <div class="q-status">
+      <span class="status-dot dot-skipped"></span>
+      <span class="status-label">Not Attempted</span>
+    </div>`;
+
+  container.appendChild(card);
+  buildPalette();
+  updatePalette();
+  card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  document.getElementById('q-json').value = '';
+  alert(`Q. ${q.qnum} added successfully!`);
+}
+
+// ── INLINE EDITING (click to edit header fields) ──
+['paper-title','paper-subtitle','paper-date','paper-shift','total-marks','paper-duration'].forEach(id => {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.style.cursor = 'text';
+  el.title = 'Click to edit';
+  el.addEventListener('click', () => {
+    const val = prompt(`Edit "${id.replace(/-/g,' ')}":`, el.textContent.trim());
+    if (val !== null) el.textContent = val;
+  });
+});
+</script>
+
+</body>
+</html>
