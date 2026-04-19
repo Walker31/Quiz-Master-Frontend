@@ -10,43 +10,65 @@ import LoginPage from "@/pages/auth/LoginPage";
 import RegisterPage from "@/pages/auth/RegisterPage";
 import ForgotPasswordPage from "@/pages/auth/ForgotPasswordPage";
 
-// Admin pages
+// Admin pages - Layout
 import AdminLayout from "@/pages/admin/AdminLayout";
-import AdminOverview from "@/pages/admin/AdminOverview";
-import ManageSubjects from "@/pages/admin/ManageSubjects";
-import ManageQuestions from "@/pages/admin/ManageQuestions";
-import ManageQuizzes from "@/pages/admin/ManageQuizzes";
-import AdminSummary from "@/pages/admin/AdminSummary";
-import GenerateQuestionPaper from "@/pages/admin/GenerateQuestionPaper";
-import ExamTypesPage from "@/pages/admin/ExamTypesPage";
-import ChaptersPage from "@/pages/admin/ChaptersPage";
-import BulkImportQuestionsPage from "@/pages/admin/BulkImportQuestionsPage";
-import QuizBuilderPage from "@/pages/admin/QuizBuilderPage";
-import QuizPreviewPage from "@/pages/admin/QuizPreviewPage";
-import QuizAssignmentsPage from "@/pages/admin/QuizAssignmentsPage";
-import BatchesPage from "@/pages/admin/BatchesPage";
-import StudentsPage from "@/pages/admin/StudentsPage";
-import StudentDetailPage from "@/pages/admin/StudentDetailPage";
-import QuizAnalyticsPage from "@/pages/admin/QuizAnalyticsPage";
-import StudentAnalyticsPage from "@/pages/admin/StudentAnalyticsPage";
-import LeaderboardPage from "@/pages/admin/LeaderboardPage";
-import SettingsPage from "@/pages/admin/SettingsPage";
-import AdminProfilePage from "@/pages/admin/AdminProfilePage";
 
-// Student/User pages
-import UserDashboard from "@/pages/user/UserDashboard";
+// Admin Dashboard
+import AdminOverview from "@/pages/admin/dashboard/AdminOverview";
+import AdminSummary from "@/pages/admin/dashboard/AdminSummary";
+
+// Admin Content Management
+import ExamTypesPage from "@/pages/admin/content/ExamTypesPage";
+import ManageSubjects from "@/pages/admin/content/ManageSubjects";
+import ChaptersPage from "@/pages/admin/content/ChaptersPage";
+import ManageQuestions from "@/pages/admin/content/ManageQuestions";
+import BulkImportQuestionsPage from "@/pages/admin/content/BulkImportQuestionsPage";
+
+// Admin Quiz Management
+import ManageQuizzes from "@/pages/admin/quiz/ManageQuizzes";
+import QuizBuilderPage from "@/pages/admin/quiz/QuizBuilderPage";
+import QuizPreviewPage from "@/pages/admin/quiz/QuizPreviewPage";
+import QuizAssignmentsPage from "@/pages/admin/quiz/QuizAssignmentsPage";
+import GenerateQuestionPaper from "@/pages/admin/quiz/GenerateQuestionPaper";
+
+// Admin Users & Batches
+import BatchesPage from "@/pages/admin/users/BatchesPage";
+import StudentsPage from "@/pages/admin/users/StudentsPage";
+import StudentDetailPage from "@/pages/admin/users/StudentDetailPage";
+
+// Admin Analytics
+import QuizAnalyticsPage from "@/pages/admin/analytics/QuizAnalyticsPage";
+import StudentAnalyticsPage from "@/pages/admin/analytics/StudentAnalyticsPage";
+import LeaderboardPage from "@/pages/admin/analytics/LeaderboardPage";
+
+// Admin Settings
+import SettingsPage from "@/pages/admin/settings/SettingsPage";
+import AdminProfilePage from "@/pages/admin/settings/AdminProfilePage";
+
+// Student/User Dashboard
+import UserDashboard from "@/pages/user/dashboard/UserDashboard";
+import AllQuizzesPage from "@/pages/user/dashboard/AllQuizzesPage";
+import MyAssignmentsPage from "@/pages/user/dashboard/MyAssignmentsPage";
+
+// Student Quiz
+import QuizDetailPage from "@/pages/user/quiz/QuizDetailPage";
+import QuizAttemptWindow from "@/pages/user/quiz/QuizAttemptWindow";
+
+// Student Results & Review
+import QuizResultPage from "@/pages/user/results/QuizResultPage";
+import SolutionReviewPage from "@/pages/user/results/SolutionReviewPage";
+import AttemptHistoryPage from "@/pages/user/results/AttemptHistoryPage";
+
+// Student Analytics
+import UserAnalyticsPage from "@/pages/user/analytics/UserAnalyticsPage";
+import StudentLeaderboardPage from "@/pages/user/analytics/StudentLeaderboardPage";
+
+// Student Profile
+import StudentProfilePage from "@/pages/user/profile/StudentProfilePage";
+
+// Legacy Student pages (backward compatibility)
 import QuizTaking from "@/pages/user/QuizTaking";
 import UserScores from "@/pages/user/UserScores";
-import AllQuizzesPage from "@/pages/user/AllQuizzesPage";
-import MyAssignmentsPage from "@/pages/user/MyAssignmentsPage";
-import QuizDetailPage from "@/pages/user/QuizDetailPage";
-import QuizAttemptWindow from "@/pages/user/QuizAttemptWindow";
-import QuizResultPage from "@/pages/user/QuizResultPage";
-import SolutionReviewPage from "@/pages/user/SolutionReviewPage";
-import AttemptHistoryPage from "@/pages/user/AttemptHistoryPage";
-import UserAnalyticsPage from "@/pages/user/UserAnalyticsPage";
-import StudentLeaderboardPage from "@/pages/user/StudentLeaderboardPage";
-import StudentProfilePage from "@/pages/user/StudentProfilePage";
 
 // Other pages
 import NotFoundPage from "@/pages/NotFoundPage";
