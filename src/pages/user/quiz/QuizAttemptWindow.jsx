@@ -7,7 +7,8 @@ import {
   Flag as FlagIcon,
   CheckCircle as CheckCircleIcon,
   Menu as MenuIcon,
-  Close as CloseIcon
+  Close as CloseIcon,
+  Description as DocumentIcon
 } from "@mui/icons-material";
 import { useAuth } from "@/context/AuthContext";
 import attemptService from "@/services/attemptService";
@@ -17,15 +18,21 @@ const QuizAttemptWindow = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
 
-  // NTA JEE Standard Colors
-  const NTA_COLORS = {
-    primary: '#0a2a6e',      // Deep navy blue
-    accent: '#c8950a',       // Gold
-    success: '#1a7a3a',      // Green
-    warning: '#f5a623',      // Orange
-    danger: '#c0392b',       // Red
-    lightBg: '#f5f6fa',      // Light background
-    lightBorder: '#dde2f0',  // Light border
+  // Official NTA JEE Colors
+  const NTA = {
+    primary: '#0a2a6e',           // Navy blue
+    secondary: '#1a4da0',         // Secondary navy
+    accent: '#c8950a',            // Gold
+    success: '#1a7a3a',           // Green
+    warning: '#f5a623',           // Orange
+    danger: '#c0392b',            // Red
+    instructionBg: '#fdf3d6',     // Light gold
+    instructionBorder: '#c8950a', // Gold border
+    lightBg: '#f5f6fa',           // Light gray
+    lightBorder: '#dde2f0',       // Light border
+    white: '#ffffff',
+    text: '#1a1a1a',
+    lightText: '#666666',
   };
 
   const [loading, setLoading] = useState(true);
@@ -37,6 +44,7 @@ const QuizAttemptWindow = () => {
   const [responses, setResponses] = useState({});
   const [timeRemaining, setTimeRemaining] = useState(0);
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [showInstructions, setShowInstructions] = useState(true);
 
   // ── Fullscreen Management ──────────────────────────────────────────────────
   const handleEnterFullscreen = async () => {
@@ -47,11 +55,11 @@ const QuizAttemptWindow = () => {
       } else if (elem.webkitRequestFullscreen) {
         await elem.webkitRequestFullscreen();
       }
-      setHasStarted(true);
     } catch (err) {
       console.error("Fullscreen error:", err);
-      setHasStarted(true);
     }
+    setShowInstructions(false);
+    setHasStarted(true);
   };
 
   // ── Data Fetching ──────────────────────────────────────────────────────────
@@ -185,48 +193,95 @@ const QuizAttemptWindow = () => {
 
   if (loading) {
     return (
-      <div className="flex h-screen items-center justify-center" style={{ backgroundColor: NTA_COLORS.lightBg }}>
+      <div className="flex h-screen items-center justify-center" style={{ backgroundColor: NTA.lightBg }}>
         <div className="text-center">
           <div className="h-12 w-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p style={{ color: '#666' }} className="font-medium">Initializing Exam...</p>
+          <p style={{ color: NTA.lightText }} className="font-medium">Loading Exam...</p>
         </div>
       </div>
     );
   }
 
-  // ── START SCREEN ──────────────────────────────────────────────────────────
-  if (!hasStarted) {
+  // ── INSTRUCTIONS & START SCREEN ──────────────────────────────────────────
+  if (showInstructions) {
     return (
-      <div className="flex h-screen items-center justify-center p-4" style={{ backgroundColor: NTA_COLORS.primary }}>
-        <div className="max-w-md w-full rounded-2xl p-8 shadow-2xl" style={{ backgroundColor: 'white', borderLeft: `6px solid ${NTA_COLORS.accent}` }}>
-          <div 
-            className="h-16 w-16 rounded-2xl mx-auto mb-6 flex items-center justify-center text-white font-black text-2xl shadow-lg" 
-            style={{ backgroundColor: NTA_COLORS.primary }}
-          >
-            {user?.username?.charAt(0).toUpperCase()}
-          </div>
-          
-          <h2 className="text-xl font-bold mb-1 text-center" style={{ color: NTA_COLORS.primary }}>
-            Welcome, {user?.username}
-          </h2>
-          <p className="text-gray-500 text-sm mb-8 text-center">Candidate ID: {String(user?.id || '').slice(0, 8)}</p>
-          
-          <div className="space-y-3 mb-8 p-4 rounded-lg" style={{ backgroundColor: NTA_COLORS.lightBg }}>
-            <div className="flex items-center gap-2 text-xs font-bold text-green-700">
-              <CheckCircleIcon fontSize="small" /> Ready to Start
+      <div className="flex h-screen items-center justify-center p-4" style={{ backgroundColor: NTA.white }}>
+        <div className="max-w-2xl w-full rounded-lg shadow-xl" style={{ backgroundColor: NTA.white, border: `2px solid ${NTA.lightBorder}` }}>
+          {/* Header */}
+          <div className="p-8 border-b" style={{ borderColor: NTA.lightBorder, backgroundColor: NTA.lightBg }}>
+            <div className="flex items-center justify-center gap-3 mb-6">
+              <DocumentIcon style={{ color: NTA.primary, fontSize: '32px' }} />
+              <h1 className="text-2xl font-bold" style={{ color: NTA.primary }}>
+                {attempt?.quiz_info?.title}
+              </h1>
             </div>
-            <p className="text-[11px] text-gray-600 leading-relaxed">
-              Click below to enter fullscreen mode. The exam timer will begin immediately.
+            <p className="text-center text-sm" style={{ color: NTA.lightText }}>
+              Candidate: {user?.username} | ID: {String(user?.id || '').slice(0, 8)}
             </p>
           </div>
 
-          <button 
-            onClick={handleEnterFullscreen}
-            className="w-full py-3 rounded-lg font-bold text-white tracking-wide shadow-lg transition-all active:scale-95"
-            style={{ backgroundColor: NTA_COLORS.primary }}
-          >
-            ENTER EXAM
-          </button>
+          {/* Instructions Box */}
+          <div className="p-8" style={{ backgroundColor: NTA.instructionBg, borderLeft: `8px solid ${NTA.instructionBorder}` }}>
+            <h2 className="text-lg font-bold mb-4" style={{ color: NTA.primary }}>
+              EXAM INSTRUCTIONS
+            </h2>
+            
+            <div className="space-y-3 text-sm mb-6" style={{ color: NTA.text }}>
+              <div className="flex gap-3">
+                <span className="font-bold">•</span>
+                <p>You have <span className="font-bold">{attempt?.quiz_info?.duration_mins} minutes</span> to complete the exam</p>
+              </div>
+              <div className="flex gap-3">
+                <span className="font-bold">•</span>
+                <p>Each correct answer carries <span className="font-bold">+{currentQ?.marks_correct || 4} marks</span></p>
+              </div>
+              <div className="flex gap-3">
+                <span className="font-bold">•</span>
+                <p>Each wrong answer carries <span className="font-bold">{currentQ?.marks_wrong || -1} mark(s)</span></p>
+              </div>
+              <div className="flex gap-3">
+                <span className="font-bold">•</span>
+                <p>You can switch between sections and review your answers at any time</p>
+              </div>
+              <div className="flex gap-3">
+                <span className="font-bold">•</span>
+                <p>Mark questions for review to revisit them later</p>
+              </div>
+              <div className="flex gap-3">
+                <span className="font-bold">•</span>
+                <p>The exam will auto-submit when time expires</p>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-2 p-4 rounded" style={{ backgroundColor: NTA.white, borderLeft: `4px solid ${NTA.warning}` }}>
+              <TimerIcon style={{ color: NTA.warning }} />
+              <p className="text-xs font-bold" style={{ color: NTA.warning }}>
+                Please ensure you have a stable internet connection before proceeding
+              </p>
+            </div>
+          </div>
+
+          {/* Action Buttons */}
+          <div className="flex gap-3 justify-end p-8">
+            <button 
+              onClick={() => navigate('/student/dashboard')}
+              className="px-6 py-2 rounded font-bold text-sm transition-all"
+              style={{ 
+                backgroundColor: NTA.lightBg, 
+                color: NTA.primary,
+                border: `1px solid ${NTA.lightBorder}`
+              }}
+            >
+              Cancel
+            </button>
+            <button 
+              onClick={handleEnterFullscreen}
+              className="px-8 py-2 rounded font-bold text-sm text-white transition-all active:scale-95"
+              style={{ backgroundColor: NTA.primary }}
+            >
+              START EXAM
+            </button>
+          </div>
         </div>
       </div>
     );
@@ -234,133 +289,141 @@ const QuizAttemptWindow = () => {
 
   // ── MAIN EXAM INTERFACE ──────────────────────────────────────────────────
   return (
-    <div className="flex h-screen flex-col overflow-hidden" style={{ backgroundColor: 'white' }}>
+    <div className="flex h-screen flex-col overflow-hidden" style={{ backgroundColor: NTA.white }}>
       
-      {/* ── HEADER ── */}
-      <header 
-        className="flex h-14 shrink-0 items-center justify-between px-6 shadow-sm"
-        style={{ backgroundColor: NTA_COLORS.primary, color: 'white' }}
-      >
-        <div className="flex items-center gap-4">
-          <h1 className="text-sm font-bold hidden md:block">{attempt?.quiz_info?.title}</h1>
-          <div className="text-[11px] font-bold opacity-70 hidden md:block">•</div>
-          <div className="flex items-center gap-1 text-sm font-bold">
-            <TimerIcon fontSize="small" />
-            <span style={{ color: timeRemaining < 300 ? NTA_COLORS.danger : 'inherit' }}>
-              {formatTime(timeRemaining)}
-            </span>
-          </div>
-        </div>
-
-        <div className="flex items-center gap-2">
+      {/* ── HEADER WITH METADATA ── */}
+      <header className="shrink-0 shadow-sm" style={{ backgroundColor: NTA.primary, color: NTA.white, padding: '12px 24px' }}>
+        <div className="flex items-center justify-between mb-3">
+          <h1 className="text-sm font-bold">{attempt?.quiz_info?.title}</h1>
           <button 
             onClick={handleSubmit} 
-            className="px-4 py-2 text-xs font-bold rounded-lg transition-colors"
-            style={{ backgroundColor: NTA_COLORS.danger, color: 'white' }}
+            className="px-4 py-1.5 text-xs font-bold rounded transition-all"
+            style={{ backgroundColor: NTA.danger, color: NTA.white }}
           >
             SUBMIT
           </button>
-          <button 
-            onClick={() => setIsSidebarOpen(!isSidebarOpen)} 
-            className="lg:hidden p-2 opacity-70 hover:opacity-100"
-          >
-            <MenuIcon fontSize="small" />
-          </button>
+        </div>
+        
+        {/* Metadata Grid */}
+        <div className="grid grid-cols-4 gap-4 text-[11px]">
+          <div>
+            <p className="opacity-70 text-xs">Exam</p>
+            <p className="font-bold">JEE (Main)</p>
+          </div>
+          <div>
+            <p className="opacity-70 text-xs">Time Remaining</p>
+            <p className="font-bold" style={{ color: timeRemaining < 300 ? NTA.danger : NTA.accent }}>
+              {formatTime(timeRemaining)}
+            </p>
+          </div>
+          <div>
+            <p className="opacity-70 text-xs">Total Marks</p>
+            <p className="font-bold">{attempt?.quiz_info?.total_marks || 300}</p>
+          </div>
+          <div>
+            <p className="opacity-70 text-xs">Candidate</p>
+            <p className="font-bold">{user?.username?.toUpperCase()}</p>
+          </div>
         </div>
       </header>
 
-      {/* ── MAIN CONTENT ── */}
+      {/* ── SECTION TABS ── */}
+      <div 
+        className="flex items-center gap-1 px-6 py-2 overflow-x-auto border-b shrink-0"
+        style={{ borderColor: NTA.lightBorder, backgroundColor: NTA.lightBg }}
+      >
+        {attempt?.quiz_info?.sections.map((sec, idx) => (
+          <button 
+            key={sec.id}
+            onClick={() => handleSectionSwitch(sec.id)}
+            className={`px-4 py-2 text-xs font-bold uppercase whitespace-nowrap rounded transition-all ${
+              sec.id === currentSectionId 
+                ? 'text-white shadow-md' 
+                : 'text-gray-600 hover:bg-white/50'
+            }`}
+            style={{
+              backgroundColor: sec.id === currentSectionId ? NTA.primary : 'transparent'
+            }}
+          >
+            {['Physics', 'Chemistry', 'Math'][idx] || sec.name} <span className="opacity-70">({sec.quiz_questions?.length || 0})</span>
+          </button>
+        ))}
+      </div>
+
+      {/* ── MAIN CONTENT AREA ── */}
       <div className="flex flex-1 overflow-hidden">
         
         {/* Left: Question Area */}
         <main className="flex flex-1 flex-col overflow-hidden">
           
-          {/* Section Tabs */}
-          <div 
-            className="flex items-center gap-1 px-6 py-2 overflow-x-auto border-b"
-            style={{ borderColor: NTA_COLORS.lightBorder, backgroundColor: NTA_COLORS.lightBg }}
-          >
-            {attempt?.quiz_info?.sections.map((sec) => (
-              <button 
-                key={sec.id}
-                onClick={() => handleSectionSwitch(sec.id)}
-                className={`px-3 py-2 text-xs font-bold uppercase whitespace-nowrap rounded transition-all ${
-                  sec.id === currentSectionId 
-                    ? 'text-white shadow-md' 
-                    : 'text-gray-600 hover:bg-white/50'
-                }`}
-                style={{
-                  backgroundColor: sec.id === currentSectionId ? NTA_COLORS.primary : 'transparent'
-                }}
-              >
-                {sec.name} ({sec.quiz_questions?.length || 0})
-              </button>
-            ))}
-          </div>
-
           {/* Question Content */}
           <div className="flex-1 overflow-y-auto p-6 md:p-8">
-            <div className="max-w-3xl mx-auto space-y-6">
-              {/* Question Number & Marks */}
-              <div className="flex items-center justify-between">
-                <span className="text-xs font-black uppercase tracking-wider" style={{ color: NTA_COLORS.primary }}>
-                  Question {currentIdx + 1} of {currentSectionQuestions.length}
-                </span>
-                <div className="flex items-center gap-2 text-[10px] font-bold">
-                  <span className="bg-green-100 text-green-700 px-2 py-1 rounded border border-green-300">
-                    +{currentQ?.marks_correct ?? 4}
-                  </span>
-                  <span className="bg-red-100 text-red-700 px-2 py-1 rounded border border-red-300">
-                    {currentQ?.marks_wrong ?? -1}
-                  </span>
+            <div className="max-w-4xl mx-auto">
+              {/* Question Number & Meta */}
+              <div className="flex items-center justify-between mb-4 pb-4 border-b" style={{ borderColor: NTA.lightBorder }}>
+                <div>
+                  <p className="text-xs font-bold opacity-70" style={{ color: NTA.primary }}>
+                    QUESTION {currentIdx + 1} OF {currentSectionQuestions.length}
+                  </p>
+                  <p className="text-xs opacity-60" style={{ color: NTA.lightText }}>
+                    {['Physics', 'Chemistry', 'Math'][attempt?.quiz_info?.sections.findIndex(s => s.id === currentSectionId)] || 'Section'} - Question {currentIdx + 1}
+                  </p>
+                </div>
+                
+                <div className="flex items-center gap-2">
+                  <div className="text-center" style={{ backgroundColor: NTA.success, color: NTA.white, padding: '4px 8px', borderRadius: '4px' }}>
+                    <p className="text-[9px] font-bold opacity-80">Correct</p>
+                    <p className="text-xs font-bold">+{currentQ?.marks_correct ?? 4}</p>
+                  </div>
+                  <div className="text-center" style={{ backgroundColor: NTA.danger, color: NTA.white, padding: '4px 8px', borderRadius: '4px' }}>
+                    <p className="text-[9px] font-bold opacity-80">Wrong</p>
+                    <p className="text-xs font-bold">{currentQ?.marks_wrong ?? -1}</p>
+                  </div>
                 </div>
               </div>
 
               {/* Question Text */}
-              <div 
-                className="p-6 rounded-xl shadow-sm border"
-                style={{ backgroundColor: 'white', borderColor: NTA_COLORS.lightBorder }}
-              >
-                <h2 className="text-lg font-bold leading-relaxed">
+              <div className="mb-6">
+                <h2 className="text-lg leading-relaxed font-serif" style={{ color: NTA.text }}>
                   {currentQ?.question_data?.text || currentQ?.question_text || "Loading question..."}
                 </h2>
                 {currentQ?.question_data?.image && (
-                  <div className="mt-4 rounded-lg overflow-hidden border" style={{ borderColor: NTA_COLORS.lightBorder }}>
+                  <div className="mt-4 rounded-lg overflow-hidden border" style={{ borderColor: NTA.lightBorder }}>
                     <img src={currentQ.question_data.image} alt="Question" className="max-w-full" />
                   </div>
                 )}
               </div>
 
-              {/* Options */}
-              <div className="space-y-3">
+              {/* Options - 2 Column Grid per NTA Standard */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {currentQ?.question_data?.options?.map((opt) => {
                   const isSelected = currentResp?.selected_options?.includes(opt.id);
                   return (
                     <button
                       key={opt.id}
                       onClick={() => handleOptionSelect(opt.id)}
-                      className={`flex items-center gap-4 w-full p-4 rounded-lg border-2 transition-all text-left ${
+                      className={`flex gap-4 p-4 rounded-lg border-2 transition-all text-left ${
                         isSelected 
                           ? 'shadow-md' 
                           : 'shadow-sm hover:shadow-md'
                       }`}
                       style={{
-                        borderColor: isSelected ? NTA_COLORS.primary : NTA_COLORS.lightBorder,
-                        backgroundColor: isSelected ? `${NTA_COLORS.primary}08` : 'white'
+                        borderColor: isSelected ? NTA.primary : NTA.lightBorder,
+                        backgroundColor: isSelected ? `${NTA.primary}08` : NTA.white
                       }}
                     >
                       <div 
                         className="flex h-8 w-8 shrink-0 items-center justify-center rounded font-bold text-sm"
                         style={{
-                          backgroundColor: isSelected ? NTA_COLORS.primary : 'white',
-                          color: isSelected ? 'white' : NTA_COLORS.primary,
-                          border: `1px solid ${NTA_COLORS.primary}`
+                          backgroundColor: isSelected ? NTA.primary : NTA.white,
+                          color: isSelected ? NTA.white : NTA.primary,
+                          border: `2px solid ${NTA.primary}`
                         }}
                       >
                         {opt.label}
                       </div>
-                      <span className="flex-1 font-medium">{opt.text}</span>
-                      {isSelected && <CheckCircleIcon style={{ color: NTA_COLORS.primary }} />}
+                      <span className="flex-1 font-medium" style={{ color: NTA.text }}>{opt.text}</span>
+                      {isSelected && <CheckCircleIcon style={{ color: NTA.primary, fontSize: '20px' }} />}
                     </button>
                   );
                 })}
@@ -370,18 +433,18 @@ const QuizAttemptWindow = () => {
 
           {/* Bottom Action Bar */}
           <footer 
-            className="h-16 shrink-0 border-t px-6 flex items-center justify-between"
-            style={{ borderColor: NTA_COLORS.lightBorder, backgroundColor: NTA_COLORS.lightBg }}
+            className="h-16 shrink-0 border-t px-6 flex items-center justify-between flex-wrap gap-4"
+            style={{ borderColor: NTA.lightBorder, backgroundColor: NTA.lightBg }}
           >
             <div className="flex items-center gap-2">
               <button 
                 onClick={() => handleStatusChange('REVIEW')}
                 className="flex items-center gap-2 px-4 py-2 rounded-lg font-bold text-xs transition-colors"
                 style={{ 
-                  borderColor: NTA_COLORS.warning,
-                  border: `2px solid ${NTA_COLORS.warning}`,
-                  color: NTA_COLORS.warning,
-                  backgroundColor: `${NTA_COLORS.warning}08`
+                  borderColor: NTA.warning,
+                  border: `2px solid ${NTA.warning}`,
+                  color: NTA.warning,
+                  backgroundColor: `${NTA.warning}08`
                 }}
               >
                 <FlagIcon fontSize="small" />
@@ -398,15 +461,15 @@ const QuizAttemptWindow = () => {
                   }
                 }}
                 className="p-2 rounded-lg border transition-colors disabled:opacity-30"
-                style={{ borderColor: NTA_COLORS.lightBorder }}
+                style={{ borderColor: NTA.lightBorder }}
               >
                 <ChevronLeft />
               </button>
               
               <button 
                 onClick={() => handleStatusChange('ANSWERED')}
-                className="px-6 py-2 rounded-lg font-bold text-xs text-white shadow-md transition-colors"
-                style={{ backgroundColor: NTA_COLORS.primary }}
+                className="px-6 py-2 rounded-lg font-bold text-xs text-white transition-colors"
+                style={{ backgroundColor: NTA.primary }}
               >
                 Save & Next
               </button>
@@ -417,13 +480,13 @@ const QuizAttemptWindow = () => {
         {/* Right Sidebar: Question Palette */}
         <aside 
           className={`${isSidebarOpen ? 'translate-x-0' : 'translate-x-full lg:translate-x-0'} absolute lg:relative right-0 top-0 bottom-0 z-20 w-72 shrink-0 flex flex-col border-l transition-transform duration-300 overflow-hidden`}
-          style={{ borderColor: NTA_COLORS.lightBorder, backgroundColor: 'white' }}
+          style={{ borderColor: NTA.lightBorder, backgroundColor: NTA.white }}
         >
           {/* Sidebar Header */}
-          <div className="p-4 border-b" style={{ borderColor: NTA_COLORS.lightBorder }}>
+          <div className="p-4 border-b" style={{ borderColor: NTA.lightBorder, backgroundColor: NTA.lightBg }}>
             <div className="flex items-center justify-between mb-3">
-              <h5 className="text-xs font-black uppercase" style={{ color: NTA_COLORS.primary }}>
-                Questions
+              <h5 className="text-xs font-bold uppercase" style={{ color: NTA.primary }}>
+                Question Navigator
               </h5>
               <button 
                 onClick={() => setIsSidebarOpen(false)}
@@ -432,40 +495,33 @@ const QuizAttemptWindow = () => {
                 <CloseIcon fontSize="small" />
               </button>
             </div>
-            <div className="flex items-center gap-3">
-              <div 
-                className="h-10 w-10 rounded-lg flex items-center justify-center text-white font-black text-sm"
-                style={{ backgroundColor: NTA_COLORS.primary }}
-              >
-                {user?.username?.charAt(0).toUpperCase()}
-              </div>
-              <div className="min-w-0 text-xs">
-                <p className="font-bold truncate">{user?.username}</p>
-                <p className="text-gray-500 text-[10px]">ID: {String(user?.id || '').slice(0, 6)}</p>
-              </div>
-            </div>
           </div>
 
-          {/* Palette Grid */}
+          {/* Palette Grid - 5 Columns per NTA Standard */}
           <div className="flex-1 overflow-y-auto p-4">
-            <div className="grid grid-cols-5 gap-2">
+            <div className="grid grid-cols-5 gap-2 mb-6">
               {questions.map((q, idx) => {
                 const resp = responses[q.id];
                 const isCurrent = q.section === currentSectionId && idx === currentIdx;
-                const sectionIdx = questions.filter(x => x.section === q.section).findIndex(x => x.id === q.id);
+                const sectionQs = questions.filter(x => x.section === q.section);
+                const qNum = sectionQs.findIndex(x => x.id === q.id) + 1;
                 
-                let bgColor = '#f0f0f0';
-                let textColor = '#666';
+                let bgColor = NTA.white;
+                let textColor = NTA.lightText;
+                let borderColor = NTA.lightBorder;
                 
                 if (resp?.visit_status === 'ANSWERED') {
-                  bgColor = NTA_COLORS.success;
-                  textColor = 'white';
+                  bgColor = NTA.success;
+                  textColor = NTA.white;
+                  borderColor = NTA.success;
                 } else if (resp?.visit_status === 'REVIEW') {
-                  bgColor = NTA_COLORS.warning;
-                  textColor = 'white';
+                  bgColor = NTA.warning;
+                  textColor = NTA.white;
+                  borderColor = NTA.warning;
                 } else if (resp?.visit_status === 'VISITED') {
-                  bgColor = NTA_COLORS.danger;
-                  textColor = 'white';
+                  bgColor = NTA.danger;
+                  textColor = NTA.white;
+                  borderColor = NTA.danger;
                 }
 
                 return (
@@ -475,48 +531,60 @@ const QuizAttemptWindow = () => {
                       if (q.section !== currentSectionId) {
                         setCurrentSectionId(q.section);
                       }
-                      const secQs = questions.filter(x => x.section === q.section);
-                      const newIdx = secQs.findIndex(x => x.id === q.id);
-                      setCurrentIdx(newIdx);
+                      setCurrentIdx(sectionQs.findIndex(x => x.id === q.id));
                     }}
                     className={`flex h-9 items-center justify-center rounded font-bold text-xs transition-all ${
-                      isCurrent ? 'ring-2 scale-110' : ''
+                      isCurrent ? 'ring-2 scale-110 shadow-lg' : ''
                     }`}
                     style={{
                       backgroundColor: bgColor,
                       color: textColor,
-                      ringColor: isCurrent ? NTA_COLORS.primary : 'transparent'
+                      border: `1px solid ${borderColor}`,
+                      outlineColor: isCurrent ? NTA.primary : 'transparent',
+                      outlineWidth: isCurrent ? '2px' : '0px',
+                      outlineOffset: isCurrent ? '2px' : '0px'
                     }}
-                    title={`${q.section} - Q${sectionIdx + 1}`}
+                    title={`Q${qNum}`}
                   >
-                    {sectionIdx + 1}
+                    {qNum}
                   </button>
                 );
               })}
             </div>
 
-            {/* Legend */}
-            <div className="mt-6 pt-4 border-t text-[10px]" style={{ borderColor: NTA_COLORS.lightBorder }}>
-              <p className="font-bold mb-3" style={{ color: NTA_COLORS.primary }}>STATUS</p>
-              <div className="space-y-2">
+            {/* Status Legend - NTA Standard */}
+            <div className="border-t pt-4" style={{ borderColor: NTA.lightBorder }}>
+              <p className="text-xs font-bold mb-3" style={{ color: NTA.primary }}>STATUS</p>
+              <div className="space-y-2 text-[11px]">
                 <div className="flex items-center gap-2">
-                  <div className="h-3 w-3 rounded" style={{ backgroundColor: NTA_COLORS.success }}></div>
-                  <span className="text-gray-600">Answered</span>
+                  <div className="h-4 w-4 rounded" style={{ backgroundColor: NTA.success }}></div>
+                  <span style={{ color: NTA.lightText }}>Answered</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <div className="h-3 w-3 rounded" style={{ backgroundColor: NTA_COLORS.danger }}></div>
-                  <span className="text-gray-600">Not Ans.</span>
+                  <div className="h-4 w-4 rounded" style={{ backgroundColor: NTA.warning }}></div>
+                  <span style={{ color: NTA.lightText }}>Marked for Review</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <div className="h-3 w-3 rounded" style={{ backgroundColor: NTA_COLORS.warning }}></div>
-                  <span className="text-gray-600">Review</span>
+                  <div className="h-4 w-4 rounded" style={{ backgroundColor: NTA.danger }}></div>
+                  <span style={{ color: NTA.lightText }}>Not Answered</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <div className="h-3 w-3 rounded border" style={{ backgroundColor: '#f0f0f0', borderColor: '#ccc' }}></div>
-                  <span className="text-gray-600">Not Visited</span>
+                  <div className="h-4 w-4 rounded border" style={{ backgroundColor: NTA.white, borderColor: NTA.lightBorder }}></div>
+                  <span style={{ color: NTA.lightText }}>Not Visited</span>
                 </div>
               </div>
             </div>
+          </div>
+
+          {/* Sidebar Footer */}
+          <div className="p-4 border-t text-[10px]" style={{ borderColor: NTA.lightBorder, backgroundColor: NTA.lightBg }}>
+            <button 
+              onClick={() => setIsSidebarOpen(false)}
+              className="lg:hidden w-full py-2 px-3 rounded font-bold text-white"
+              style={{ backgroundColor: NTA.primary }}
+            >
+              Close Navigator
+            </button>
           </div>
         </aside>
       </div>
