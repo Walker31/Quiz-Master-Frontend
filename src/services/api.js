@@ -2,6 +2,10 @@ import axios from "axios";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000";
 
+const redirectToLogin = () => {
+  window.location.replace("/login");
+};
+
 export const apiClient = axios.create({
   baseURL: API_BASE_URL,
   headers: { "Content-Type": "application/json" },
@@ -50,7 +54,7 @@ apiClient.interceptors.response.use(
         localStorage.removeItem("authToken");
         localStorage.removeItem("refreshToken");
         localStorage.removeItem("userData");
-        window.location.href = "/login";
+        redirectToLogin();
         return Promise.reject(error);
       }
 
@@ -69,7 +73,7 @@ apiClient.interceptors.response.use(
         localStorage.removeItem("authToken");
         localStorage.removeItem("refreshToken");
         localStorage.removeItem("userData");
-        window.location.href = "/login";
+        redirectToLogin();
         return Promise.reject(refreshErr);
       } finally {
         isRefreshing = false;

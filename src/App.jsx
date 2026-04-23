@@ -1,4 +1,4 @@
-import { Navigate, Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes, useLocation } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import ProtectedRoute from "@/components/ProtectedRoute";
 
@@ -74,9 +74,15 @@ import UserScores from "@/pages/user/UserScores";
 import NotFoundPage from "@/pages/NotFoundPage";
 
 function App() {
+  const location = useLocation();
+  const shouldHideNavbar =
+    location.pathname.startsWith("/student/attempt/") ||
+    location.pathname.startsWith("/student/result/") ||
+    location.pathname === "/404";
+
   return (
     <div className="min-h-screen">
-      <Navbar />
+      {!shouldHideNavbar && <Navbar />}
 
       <Routes>
         {/* Public Routes */}
@@ -127,6 +133,7 @@ function App() {
           <Route path="settings" element={<SettingsPage />} />
           <Route path="profile" element={<AdminProfilePage />} />
           <Route path="summary" element={<AdminSummary />} />
+          <Route path="*" element={<Navigate to="/404" replace />} />
         </Route>
 
         {/* Student/User Routes */}
@@ -148,8 +155,10 @@ function App() {
         <Route path="/take-quiz/:id" element={<ProtectedRoute><QuizTaking /></ProtectedRoute>} />
         <Route path="/scores" element={<ProtectedRoute><UserScores /></ProtectedRoute>} />
 
+        <Route path="/404" element={<NotFoundPage />} />
+
         {/* 404 Not Found */}
-        <Route path="*" element={<NotFoundPage />} />
+        <Route path="*" element={<Navigate to="/404" replace />} />
       </Routes>
     </div>
   );

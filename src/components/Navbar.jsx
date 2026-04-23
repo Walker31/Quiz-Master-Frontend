@@ -1,4 +1,4 @@
-import { NavLink, useLocation } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { useTheme } from "@/context/ThemeContext";
 import { useAuth } from "@/context/AuthContext";
 import LightModeIcon from '@mui/icons-material/LightMode';
@@ -11,6 +11,7 @@ import { useState, useRef, useEffect } from "react";
 function Navbar() {
   const { theme, toggleTheme } = useTheme();
   const { isAuthenticated, logout } = useAuth();
+  const navigate = useNavigate();
   const location = useLocation();
   const isDark = theme === "dark";
   const [showUserMenu, setShowUserMenu] = useState(false);
@@ -39,7 +40,7 @@ function Navbar() {
   const handleLogout = () => {
     logout();
     setShowUserMenu(false);
-    window.location.href = "/login";
+    navigate("/login", { replace: true });
   };
 
   const baseLink = "px-4 py-2 text-sm font-semibold rounded-lg transition-colors";
