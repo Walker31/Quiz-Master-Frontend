@@ -16,65 +16,78 @@ import {
   ArrowForward as ArrowForwardIcon
 } from "@mui/icons-material";
 
+import { useNotification } from "@/context/NotificationContext";
+
 export default function QuizDetailPage() {
   const { id } = useParams();
   const navigate = useNavigate();
   const { user } = useAuth();
+  const { showSnackbar, showConfirm } = useNotification();
   
   const [quiz, setQuiz] = useState(null);
+  const [attemptCount, setAttemptCount] = useState(0);
   const [loading, setLoading] = useState(true);
   const [starting, setStarting] = useState(false);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const fetchQuiz = async () => {
+    const fetchData = async () => {
       try {
-        const res = await quizService.getQuizDetails(id);
-        setQuiz(res.data);
+        const [quizRes, attemptRes] = await Promise.all([
+          quizService.getQuizDetails(id),
+          attemptService.getAttempts({ quiz: id })
+        ]);
+        setQuiz(quizRes.data);
+        // Assuming the response is a list or has a count
+        setAttemptCount(attemptRes.data.count || attemptRes.data.length || 0);
       } catch (e) {
         setError("Failed to load quiz details. It might be unavailable.");
       } finally {
         setLoading(false);
       }
     };
-    fetchQuiz();
+    fetchData();
   }, [id]);
 
   const handleStartAttempt = async () => {
-    if (!confirm("Are you sure you want to start the exam? The timer will begin immediately.")) return;
-    
-    setStarting(true);
-    try {
-      const res = await attemptService.startAttempt(id);
-      const attemptId = res.data?.id;
-      
-      if (!attemptId) {
-        throw new Error("Invalid response from server: Missing Attempt ID");
-      }
+    showConfirm(
+      "Start Exam",
+      "Are you sure you want to start the exam? The timer will begin immediately as soon as the exam window opens.",
+      async () => {
+        setStarting(true);
+        try {
+          const res = await attemptService.startAttempt(id);
+          const attemptId = res.data?.id;
+          
+          if (!attemptId) {
+            throw new Error("Invalid response from server: Missing Attempt ID");
+          }
 
-      const url = `/student/attempt/${attemptId}`;
-      
-      // Open in a new dedicated browser window (like Ctrl+N)
-      const width = window.screen.availWidth;
-      const height = window.screen.availHeight;
-      const examWindow = window.open(
-        url, 
-        "_blank", 
-        `width=${width},height=${height},menubar=no,status=no,toolbar=no,location=no,scrollbars=yes,resizable=yes`
-      );
-      
-      if (!examWindow) {
-        alert("Please allow pop-ups for this site to start the exam.");
-        setStarting(false);
-        return;
+          const url = `/student/attempt/${attemptId}`;
+          
+          // Open in a new dedicated browser window (like Ctrl+N)
+          const width = window.screen.availWidth;
+          const height = window.screen.availHeight;
+          const examWindow = window.open(
+            url, 
+            "_blank", 
+            `width=${width},height=${height},menubar=no,status=no,toolbar=no,location=no,scrollbars=yes,resizable=yes`
+          );
+          
+          if (!examWindow) {
+            showSnackbar("Please allow pop-ups for this site to start the exam.", "warning");
+            setStarting(false);
+            return;
+          }
+          
+          // Navigate the main window back to dashboard
+          navigate('/student/dashboard');
+        } catch (e) {
+          showSnackbar(e.response?.data?.detail || "Failed to start attempt. Please try again.", "error");
+          setStarting(false);
+        }
       }
-      
-      // Navigate the main window back to dashboard
-      navigate('/dashboard');
-    } catch (e) {
-      alert(e.response?.data?.detail || "Failed to start attempt. Please try again.");
-      setStarting(false);
-    }
+    );
   };
 
   if (loading) {
@@ -174,27 +187,41 @@ export default function QuizDetailPage() {
                 <span className="text-sm font-bold">{user?.username}</span>
               </div>
               <div className="flex items-center justify-between p-3 rounded-xl bg-white/10 backdrop-blur-md">
-                <span className="text-[10px] font-bold uppercase opacity-70">Max Attempts</span>
-                <span className="text-sm font-bold">{quiz.max_attempts}</span>
+                <span className="text-[10px] font-bold uppercase opacity-70">Attempts</span>
+                <span className="text-sm font-bold">{attemptCount} / {quiz.max_attempts}</span>
               </div>
             </div>
 
-            <button
-              onClick={handleStartAttempt}
-              disabled={starting}
-              className="w-full bg-white text-(--color-accent) hover:bg-slate-100 py-4 rounded-xl font-black text-sm transition-all shadow-lg flex items-center justify-center gap-2"
-            >
-              {starting ? (
-                <>
-                  <div className="h-4 w-4 border-2 border-(--color-accent) border-t-transparent animate-spin rounded-full" />
-                  Starting Session...
-                </>
-              ) : (
-                <>
-                  Start Exam Now <ArrowForwardIcon fontSize="small" />
-                </>
-              )}
-            </button>
+            {attemptCount >= quiz.max_attempts ? (
+              <div className="flex flex-col gap-3">
+                <button
+                  disabled
+                  className="w-full bg-white/20 text-white/50 py-4 rounded-xl font-black text-sm cursor-not-allowed border border-white/10"
+                >
+                  MAX ATTEMPTS REACHED
+                </button>
+                <p className="text-center text-[10px] font-bold text-white/90 bg-black/20 py-1 rounded-full px-2">
+                  You have exhausted all allowed attempts for this exam.
+                </p>
+              </div>
+            ) : (
+              <button
+                onClick={handleStartAttempt}
+                disabled={starting}
+                className="w-full bg-white text-(--color-accent) hover:bg-slate-100 py-4 rounded-xl font-black text-sm transition-all shadow-lg flex items-center justify-center gap-2 group"
+              >
+                {starting ? (
+                  <>
+                    <div className="h-4 w-4 border-2 border-(--color-accent) border-t-transparent animate-spin rounded-full" />
+                    Starting Session...
+                  </>
+                ) : (
+                  <>
+                    Start Exam Now <ArrowForwardIcon fontSize="small" className="group-hover:translate-x-1 transition-transform" />
+                  </>
+                )}
+              </button>
+            )}
           </div>
 
           <div className="theme-card p-6 border-dashed border-2">

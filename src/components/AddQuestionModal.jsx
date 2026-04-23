@@ -6,6 +6,8 @@ import CloseIcon from "@mui/icons-material/Close";
 import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
 
+import { useNotification } from "@/context/NotificationContext";
+
 const QUESTION_TYPES = [
   { id: "mcq", label: "Multiple Choice", icon: "📋", desc: "Select one correct answer" },
   { id: "true_false", label: "True / False", icon: "✓✗", desc: "Simple true or false" },
@@ -25,6 +27,8 @@ function AddQuestionModal({ open, onClose, onSubmit, chapterName }) {
     correct_answer: "0",
     explanation: "",
   });
+
+  const { showSnackbar } = useNotification();
 
   const handleTypeSelect = (typeId) => {
     setForm((prev) => ({ ...prev, type: typeId }));
@@ -59,11 +63,11 @@ function AddQuestionModal({ open, onClose, onSubmit, chapterName }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!form.text.trim()) {
-      alert("Please enter the question text");
+      showSnackbar("Please enter the question text", "warning");
       return;
     }
     if (form.type === "mcq" && form.options.some((opt) => !opt.trim())) {
-      alert("Please fill all options");
+      showSnackbar("Please fill all options", "warning");
       return;
     }
     onSubmit(form);

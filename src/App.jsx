@@ -74,18 +74,9 @@ import UserScores from "@/pages/user/UserScores";
 import NotFoundPage from "@/pages/NotFoundPage";
 
 function App() {
-  // Routes that should NOT show navbar
-  const noNavbarRoutes = [
-    /^\/student\/attempt\//,  // Quiz attempt window
-    /^\/student\/result\//,   // Quiz result (optional)
-  ];
-
-  const pathname = window.location.pathname;
-  const shouldShowNavbar = !noNavbarRoutes.some(route => route.test(pathname));
-
   return (
     <div className="min-h-screen">
-      {shouldShowNavbar && <Navbar />}
+      <Navbar />
 
       <Routes>
         {/* Public Routes */}

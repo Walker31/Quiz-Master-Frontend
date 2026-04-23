@@ -31,7 +31,9 @@ function ManageQuizzes() {
         contentService.getSubjects(), 
         contentService.getChapters(),
       ]);
-      setQuizzes(qzRes.data); setSubjects(sRes.data); setChapters(cRes.data);
+      setQuizzes(Array.isArray(qzRes.data) ? qzRes.data : qzRes.data?.results || []);
+      setSubjects(Array.isArray(sRes.data) ? sRes.data : sRes.data?.results || []);
+      setChapters(Array.isArray(cRes.data) ? cRes.data : cRes.data?.results || []);
     } catch (e) { console.error(e); } finally { setLoading(false); }
   };
 

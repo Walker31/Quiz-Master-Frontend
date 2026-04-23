@@ -17,6 +17,8 @@ import AssignmentIcon from "@mui/icons-material/Assignment";
 import TrendingUpIcon from "@mui/icons-material/TrendingUp";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 
+import { useNotification } from "@/context/NotificationContext";
+
 const QUESTION_TYPE_LABELS = {
   mcq: "Multiple Choice",
   true_false: "True/False",
@@ -55,6 +57,8 @@ function ManageQuestions() {
   const [searchQuery, setSearchQuery] = useState("");
   const [showAddModal, setShowAddModal] = useState(false);
 
+  const { showSnackbar, showConfirm } = useNotification();
+
   const fetchData = async () => {
     try {
       setLoading(true);
@@ -68,6 +72,7 @@ function ManageQuestions() {
       setQuestions(questionsRes.data);
     } catch (e) {
       console.error(e);
+      showSnackbar("Failed to fetch data", "error");
     } finally {
       setLoading(false);
     }
@@ -81,21 +86,29 @@ function ManageQuestions() {
     try {
       await contentService.createQuestion({ ...formData, chapter: parseInt(chapterId) });
       setShowAddModal(false);
+      showSnackbar("Question added successfully", "success");
       fetchData();
     } catch (e) {
       console.error(e);
-      alert("Failed to add question");
+      showSnackbar("Failed to add question", "error");
     }
   };
 
   const handleDeleteQuestion = async (id) => {
-    if (!confirm("Delete this question?")) return;
-    try {
-      await contentService.deleteQuestion(id);
-      fetchData();
-    } catch (e) {
-      console.error(e);
-    }
+    showConfirm(
+      "Delete Question",
+      "Are you sure you want to delete this question? This action cannot be undone.",
+      async () => {
+        try {
+          await contentService.deleteQuestion(id);
+          showSnackbar("Question deleted", "success");
+          fetchData();
+        } catch (e) {
+          console.error(e);
+          showSnackbar("Failed to delete question", "error");
+        }
+      }
+    );
   };
 
   const filteredQuestions = questions.filter((q) =>

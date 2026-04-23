@@ -1,4 +1,4 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 import { useTheme } from "@/context/ThemeContext";
 import { useAuth } from "@/context/AuthContext";
 import LightModeIcon from '@mui/icons-material/LightMode';
@@ -11,9 +11,18 @@ import { useState, useRef, useEffect } from "react";
 function Navbar() {
   const { theme, toggleTheme } = useTheme();
   const { isAuthenticated, logout } = useAuth();
+  const location = useLocation();
   const isDark = theme === "dark";
   const [showUserMenu, setShowUserMenu] = useState(false);
   const menuRef = useRef(null);
+
+  // Hide navbar on exam attempt and result pages
+  const noNavbarRoutes = ['/student/attempt/', '/student/result/'];
+  const shouldHideNavbar = noNavbarRoutes.some(route => location.pathname.includes(route));
+
+  if (shouldHideNavbar) {
+    return null;
+  }
 
   // Close menu when clicking outside
   useEffect(() => {

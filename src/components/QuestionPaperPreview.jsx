@@ -6,9 +6,11 @@ import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 import { Document, Packer, Paragraph, Table, TableCell, TableRow, TextRun, PageBreak, AlignmentType } from "docx";
 import { saveAs } from "file-saver";
+import { useNotification } from "@/context/NotificationContext";
 
 function QuestionPaperPreview({ questions, paperName, totalMarks, onBack }) {
   const printRef = useRef(null);
+  const { showSnackbar } = useNotification();
 
   // Load MathJax for mathematical equations
   useEffect(() => {
@@ -441,7 +443,7 @@ function QuestionPaperPreview({ questions, paperName, totalMarks, onBack }) {
       pdf.save(`${paperName.replace(/\s+/g, "_")}.pdf`);
     } catch (error) {
       console.error("PDF download error:", error);
-      alert("Error generating PDF. Using browser print instead.");
+      showSnackbar("Error generating PDF. Using browser print instead.", "warning");
       handlePrint();
     }
   };

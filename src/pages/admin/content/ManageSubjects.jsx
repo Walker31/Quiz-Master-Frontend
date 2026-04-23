@@ -57,10 +57,10 @@ function ManageSubjects() {
         contentService.getChapters(),
         quizService.getQuizzes(), // Quizzes stay in quizService
       ]);
-      setExamTypes(etRes.data);
-      setSubjects(sRes.data);
-      setChapters(cRes.data);
-      setQuizzes(qRes.data);
+      setExamTypes(Array.isArray(etRes.data) ? etRes.data : etRes.data?.results || []);
+      setSubjects(Array.isArray(sRes.data) ? sRes.data : sRes.data?.results || []);
+      setChapters(Array.isArray(cRes.data) ? cRes.data : cRes.data?.results || []);
+      setQuizzes(Array.isArray(qRes.data) ? qRes.data : qRes.data?.results || []);
     } catch (e) {
       console.error("Failed to fetch data:", e);
     } finally {

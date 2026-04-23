@@ -43,13 +43,14 @@ function GenerateQuestionPaper() {
         contentService.getQuestions(),
         quizService.getQuizzes(),
       ]);
-      setSubjects(sRes.data);
-      setChapters(cRes.data);
+      setSubjects(Array.isArray(sRes.data) ? sRes.data : sRes.data?.results || []);
+      setChapters(Array.isArray(cRes.data) ? cRes.data : cRes.data?.results || []);
       
       // Normalize questions to have correct field names
-      const normalizedQuestions = (qRes.data || []).map(normalizeQuestion);
+      const questionsData = Array.isArray(qRes.data) ? qRes.data : qRes.data?.results || [];
+      const normalizedQuestions = questionsData.map(normalizeQuestion);
       setQuestions(normalizedQuestions);
-      setQuizzes(quizRes.data || []);
+      setQuizzes(Array.isArray(quizRes.data) ? quizRes.data : quizRes.data?.results || []);
       
       // Debug: Log fetched questions
       console.log('Fetched questions count:', normalizedQuestions.length);
